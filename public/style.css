@@ -1,0 +1,17 @@
+button{
+	background-color: transparent;
+	border: 1px solid black;
+	border-radius: 10px;
+	}
+	
+button:hover{
+	color: white;
+	background-color: black;
+}
+
+button:focus {outline:0;}
+	
+#first-row{
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
