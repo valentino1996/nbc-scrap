@@ -2,81 +2,87 @@ var express = require("express"),
 	mongoose = require("mongoose"),
 	bodyParser = require("body-parser"),
 	passport = require("passport"),
+	session = require("express-session"),
 	TwitterStrategy = require("passport-twitter").Strategy,
 	Xray = require("x-ray");
 	
 var app = express();
 var x = Xray();
 
-//app.use(express.static("public"));
+app.use(express.static("public"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(session({
+  resave: false,
+  saveUninitialized: true,
+  secret: 'bla bla bla' 
+}));
 
 var user="";
+var userObj;
 var token = '2538355556-GeEuOWBlO2wo7vi6zHq9nEOrfdGRIkZQT1wcW1P';
 var tokenSecret = 'fuSWRwwzBRVSQrskxEwSHIZoFBc0PJUydlkz94rLDyA9T';
 var idName ="";
 var obj = {
 	
-	data:[
-		
-		{
+
+		one:{
 			newsLink: "html body main " + idName + "#top-stories-section div div div div div div div a@href",
 			img: "html body main " + idName + "#top-stories-section div div div div div div img@src",
 			title: "html body main " + idName + "#top-stories-section div div div div div div div a div img@alt"
 		},
 		
-		{
+		two:{
 			newsLink: "html body main " + idName + "#top-stories-section .col-sm-12:nth-of-type(1) .visible-lg-block a@href",
 			img: "html body main " + idName + "#top-stories-section .col-sm-12:nth-of-type(1) .visible-lg-block img@src",
 			title: "html body main " + idName + "#top-stories-section .col-sm-12:nth-of-type(1) .visible-lg-block img@alt"
 		},
 		
-		{
+		three:{
 			newsLink: "html body main " + idName + "#top-stories-section .col-sm-12:nth-of-type(2) .visible-lg-block a@href",
 			img: "html body main " + idName + "#top-stories-section .col-sm-12:nth-of-type(2) .visible-lg-block img@src",
 			title: "html body main " + idName + "#top-stories-section .col-sm-12:nth-of-type(2) .visible-lg-block img@alt"
 		},
 		
-		{
+		four:{
 			newsLink: "html body main " + idName + "#top-stories-section .col-lg-4 .col-md-lg-6:nth-of-type(1) .story-link:nth-of-type(1) a@href",
 			img: "html body main " + idName + "#top-stories-section .col-lg-4 .col-md-lg-6:nth-of-type(1) .story-link:nth-of-type(1) img@data-original",
 			title: "html body main " + idName + "#top-stories-section .col-lg-4 .col-md-lg-6:nth-of-type(1) .story-link:nth-of-type(1) img@alt"
 		},
 
-		{
+		five:{
 			newsLink: "html body main " + idName + "#top-stories-section .col-lg-4 .col-md-lg-6:nth-of-type(1) .story-link:nth-of-type(2) a@href",
 			img: "html body main " + idName + "#top-stories-section .col-lg-4 .col-md-lg-6:nth-of-type(1) .story-link:nth-of-type(2) img@data-original",
 			title: "html body main " + idName + "#top-stories-section .col-lg-4 .col-md-lg-6:nth-of-type(1) .story-link:nth-of-type(2) img@alt"
 		},
 		
-		{
+		six:{
 			newsLink: "html body main " + idName + "#top-stories-section .col-lg-4 .col-md-lg-6:nth-of-type(1) .story-link:nth-of-type(3) a@href",
 			img: "html body main " + idName + "#top-stories-section .col-lg-4 .col-md-lg-6:nth-of-type(1) .story-link:nth-of-type(3) img@data-original",
 			title: "html body main " + idName + "#top-stories-section .col-lg-4 .col-md-lg-6:nth-of-type(1) .story-link:nth-of-type(3) img@alt"
 		},
 		
-		{
+		seven:{
 			newsLink: "html body main " + idName + "#top-stories-section .col-lg-4 .col-md-lg-6:nth-of-type(2) .story-link:nth-of-type(1) a@href",
 			img: "html body main " + idName + "#top-stories-section .col-lg-4 .col-md-lg-6:nth-of-type(2) .story-link:nth-of-type(1) img@data-original",
 			title: "html body main " + idName + "#top-stories-section .col-lg-4 .col-md-lg-6:nth-of-type(2) .story-link:nth-of-type(1) img@alt"
 		},
 		
-		{
+		eight:{
 			newsLink: "html body main " + idName + "#top-stories-section .col-lg-4 .col-md-lg-6:nth-of-type(2) .story-link:nth-of-type(2) a@href",
 			img: "html body main " + idName + "#top-stories-section .col-lg-4 .col-md-lg-6:nth-of-type(2) .story-link:nth-of-type(2) img@data-original",
 			title: "html body main " + idName + "#top-stories-section .col-lg-4 .col-md-lg-6:nth-of-type(2) .story-link:nth-of-type(2) img@alt"
 		},
 		
-		{
+		nine:{
 			newsLink: "html body main " + idName + "#top-stories-section .col-lg-4 .col-md-lg-6:nth-of-type(2) .story-link:nth-of-type(3) a@href",
 			img: "html body main " + idName + "#top-stories-section .col-lg-4 .col-md-lg-6:nth-of-type(2) .story-link:nth-of-type(3) img@data-original",
 			title: "html body main " + idName + "#top-stories-section .col-lg-4 .col-md-lg-6:nth-of-type(2) .story-link:nth-of-type(3) img@alt"
 		}
 		
-	]}
+	};
 
 /*
 mongoose.connect("mongodb://test:test@ds053156.mlab.com:53156/mongodb-test-valentino", function (err) {
@@ -109,9 +115,12 @@ mongoose.connection.once("open", function(err){
 	},
 	function(token, tokenSecret, profile, done) {
 		
-			console.log(profile);
-			console.log(profile.id);
 			user=profile.id;
+			userObj={
+				username: profile.username,
+				displayName: profile.displayName,
+				photo: profile.photos[0].value
+			};
 			
 			passport.serializeUser(function(user, done) {
 				done(null, user);
@@ -126,9 +135,16 @@ mongoose.connection.once("open", function(err){
 		}
 	));
 	
-	app.get("/", function(req, res){
+	app.post("/", function(req, res){
+		userObj = req.body.a;
+		console.log(userObj);
+		res.send(userObj);
 		
 	});
+	
+app.post("/twitter", function(req, res){
+	res.json(userObj);
+});
 
 app.get("/health", function(req, res){
 	
@@ -148,6 +164,7 @@ app.get("/world", function(req, res){
 	x('http://www.nbcnews.com/news/world', obj)(function(err, code) {
 		
 		res.json(code);
+		console.log(code);
 	});
 	
 });
@@ -239,7 +256,7 @@ app.get("/us", function(req, res){
 	
 	app.get("/login", function(req, res){
 		res.send("twitter authentication went wrong");
-	})
+	});
 
 	app.get('/auth/twitter/callback',
 		passport.authenticate('twitter', { successRedirect: '/',

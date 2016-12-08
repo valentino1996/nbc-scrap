@@ -43,3 +43,20 @@ h1{
 p{
 	cursor: default;
 }
+#one{
+	margin-left: 100px;
+}
+h2{
+	cursor: default;
+	font-size: 50px;
+}
+.news{
+	margin-top: 2%;
+}
+.news:hover{
+	border: 1px solid black;
+	background-color: #EEE;
+}
+img{
+	margin: 5px;
+}
