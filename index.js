@@ -138,7 +138,7 @@ mongoose.connection.once("open", function(err){
 	app.post("/", function(req, res){
 		userObj = req.body.a;
 		console.log(userObj);
-		res.send(userObj);
+		//a\sares.send(userObj);
 		
 	});
 	
