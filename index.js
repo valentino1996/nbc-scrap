@@ -8,12 +8,72 @@ var express = require("express"),
 var app = express();
 var x = Xray();
 
-//app.use(express.static("public"));
+app.use(express.static("public"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(passport.initialize());
 app.use(passport.session());
 
+var idName ="";
+var obj = {
+		
+		one:{
+			newsLink: "html body main " + idName + "#top-stories-section div div div div div div div a@href",
+			img: "html body main " + idName + "#top-stories-section div div div div div div img@src",
+			title: "html body main " + idName + "#top-stories-section div div div div div div div a div img@alt"
+		},
+		
+		two:{
+			newsLink: "html body main " + idName + "#top-stories-section .col-sm-12:nth-of-type(1) .visible-lg-block a@href",
+			img: "html body main " + idName + "#top-stories-section .col-sm-12:nth-of-type(1) .visible-lg-block img@src",
+			title: "html body main " + idName + "#top-stories-section .col-sm-12:nth-of-type(1) .visible-lg-block img@alt"
+		},
+		
+		three:{
+			newsLink: "html body main " + idName + "#top-stories-section .col-sm-12:nth-of-type(2) .visible-lg-block a@href",
+			img: "html body main " + idName + "#top-stories-section .col-sm-12:nth-of-type(2) .visible-lg-block img@src",
+			title: "html body main " + idName + "#top-stories-section .col-sm-12:nth-of-type(2) .visible-lg-block img@alt"
+		},
+		
+		four:{
+			newsLink: "html body main " + idName + "#top-stories-section .col-lg-4 .col-md-lg-6:nth-of-type(1) .story-link:nth-of-type(1) a@href",
+			img: "html body main " + idName + "#top-stories-section .col-lg-4 .col-md-lg-6:nth-of-type(1) .story-link:nth-of-type(1) img@data-original",
+			title: "html body main " + idName + "#top-stories-section .col-lg-4 .col-md-lg-6:nth-of-type(1) .story-link:nth-of-type(1) img@alt"
+		},
+		
+		five:{
+			newsLink: "html body main " + idName + "#top-stories-section .col-lg-4 .col-md-lg-6:nth-of-type(1) .story-link:nth-of-type(2) a@href",
+			img: "html body main " + idName + "#top-stories-section .col-lg-4 .col-md-lg-6:nth-of-type(1) .story-link:nth-of-type(2) img@data-original",
+			title: "html body main " + idName + "#top-stories-section .col-lg-4 .col-md-lg-6:nth-of-type(1) .story-link:nth-of-type(2) img@alt"
+			},
+		
+		six:{
+			newsLink: "html body main " + idName + "#top-stories-section .col-lg-4 .col-md-lg-6:nth-of-type(1) .story-link:nth-of-type(3) a@href",
+			img: "html body main " + idName + "#top-stories-section .col-lg-4 .col-md-lg-6:nth-of-type(1) .story-link:nth-of-type(3) img@data-original",
+			title: "html body main " + idName + "#top-stories-section .col-lg-4 .col-md-lg-6:nth-of-type(1) .story-link:nth-of-type(3) img@alt"
+			},
+		
+		seven:{
+			newsLink: "html body main " + idName + "#top-stories-section .col-lg-4 .col-md-lg-6:nth-of-type(2) .story-link:nth-of-type(1) a@href",
+			img: "html body main " + idName + "#top-stories-section .col-lg-4 .col-md-lg-6:nth-of-type(2) .story-link:nth-of-type(1) img@data-original",
+			title: "html body main " + idName + "#top-stories-section .col-lg-4 .col-md-lg-6:nth-of-type(2) .story-link:nth-of-type(1) img@alt"
+			},
+		
+		eight:{
+			newsLink: "html body main " + idName + "#top-stories-section .col-lg-4 .col-md-lg-6:nth-of-type(2) .story-link:nth-of-type(2) a@href",
+			img: "html body main " + idName + "#top-stories-section .col-lg-4 .col-md-lg-6:nth-of-type(2) .story-link:nth-of-type(2) img@data-original",
+			title: "html body main " + idName + "#top-stories-section .col-lg-4 .col-md-lg-6:nth-of-type(2) .story-link:nth-of-type(2) img@alt"
+			},
+		
+		nine:{
+			newsLink: "html body main " + idName + "#top-stories-section .col-lg-4 .col-md-lg-6:nth-of-type(2) .story-link:nth-of-type(3) a@href",
+			img: "html body main " + idName + "#top-stories-section .col-lg-4 .col-md-lg-6:nth-of-type(2) .story-link:nth-of-type(3) img@data-original",
+			title: "html body main " + idName + "#top-stories-section .col-lg-4 .col-md-lg-6:nth-of-type(2) .story-link:nth-of-type(3) img@alt"
+			}
+		
+	}
+
+/*
 mongoose.connect("mongodb://test:test@ds053156.mlab.com:53156/mongodb-test-valentino", function (err) {
 	
 	if (err) {
@@ -36,150 +96,111 @@ mongoose.connection.once("open", function(err){
 		//create snippet
 		
 	}
-	
+	*/
 
-app.get("/", function(req, res){
-	x('http://www.nbcnews.com/news/us-news', {
+app.get("/health", function(req, res){
+	
+	idName="#health-section";
+	
+	x('http://www.nbcnews.com/health', obj)(function(err, code) {
 		
-		news_main_link: "html body main #us-news-section #top-stories-section div div div div div div div a@href",
-		news_main_img: "html body main #us-news-section #top-stories-section div div div div div div img@src",
-		news_main_line: "html body main #us-news-section #top-stories-section div div div div div div div a div img@alt"
-		
-	})(function(err, code) {
-		console.log(code);
 		res.json(code);
 	});
+	
 });
 
 app.get("/world", function(req, res){
 	
-	x('http://www.nbcnews.com/news/world', {
+	idName="#world-section";
+	
+	x('http://www.nbcnews.com/news/world', obj)(function(err, code) {
 		
-		news_main_link: "html body main #world-section #top-stories-section div div div div div div div a@href",
-		news_main_img: "html body main #world-section #top-stories-section div div div div div div img@src",
-		news_main_line: "html body main #world-section #top-stories-section div div div div div div div a div img@alt"
-		
-	})(function(err, code) {
-		console.log(code);
 		res.json(code);
 	});
+	
 });
 
 app.get("/politics", function(req, res){
+	
+	idName="#politics-section";
+	
+	x('http://www.nbcnews.com/politics', obj)(function(err, code) {
+		
+		res.json(code);
+	});
 	
 });
 
 app.get("/invest", function(req, res){
 	
-	x('http://www.nbcnews.com/news/investigations', {
-		
-		news_main_link: "html body main #investigations-section #top-stories-section div div div div div div div a@href",
-		news_main_img: "html body main #investigations-section #top-stories-section div div div div div div img@src",
-		news_main_line: "html body main #investigations-section #top-stories-section div div div div div div div a div img@alt"
-		
-	})(function(err, code) {
-		console.log(code);
-		res.json(code);
-	});
-});
-
-app.get("/health", function(req, res){
+	idName="#investigations-section";
 	
-	x('http://www.nbcnews.com/health', {
+	x('http://www.nbcnews.com/news/investigations', obj)(function(err, code) {
 		
-		news_main_link: "html body main #health-section #top-stories-section div div div div div div div a@href",
-		news_main_img: "html body main #health-section #top-stories-section div div div div div div img@src",
-		news_main_line: "html body main #health-section #top-stories-section div div div div div div div a div img@alt"
-		
-	})(function(err, code) {
-		console.log(code);
 		res.json(code);
 	});
+	
 });
 
 app.get("/tech", function(req, res){
 	
-	x('http://www.nbcnews.com/tech', {
+	idName="#tech-section";
+	
+	x('http://www.nbcnews.com/tech', obj)(function(err, code) {
 		
-		news_main_link: "html body main #tech-section #top-stories-section div div div div div div div a@href",
-		news_main_img: "html body main #tech-section #top-stories-section div div div div div div img@src",
-		news_main_line: "html body main #tech-section #top-stories-section div div div div div div div a div img@alt"
-		
-	})(function(err, code) {
-		console.log(code);
 		res.json(code);
 	});
 });
 
 app.get("/science", function(req, res){
 	
-	x('http://www.nbcnews.com/science', {
+	idName ="#science-section";
+	
+	x('http://www.nbcnews.com/science', obj)(function(err, code) {
 		
-		news_main_link: "html body main #science-section #top-stories-section div div div div div div div a@href",
-		news_main_img: "html body main #science-section #top-stories-section div div div div div div img@src",
-		news_main_line: "html body main #science-section #top-stories-section div div div div div div div a div img@alt"
-		
-	})(function(err, code) {
-		console.log(code);
 		res.json(code);
 	});
 });
 
 app.get("/popculture", function(req, res){
 	
-	x('http://www.nbcnews.com/pop-culture', {
+	idName ="#pop-culture-section";
+	
+	x('http://www.nbcnews.com/pop-culture', obj)(function(err, code) {
 		
-		news_main_link: "html body main #pop-culture-section #top-stories-section div div div div div div div a@href",
-		news_main_img: "html body main #pop-culture-section #top-stories-section div div div div div div img@src",
-		news_main_line: "html body main #pop-culture-section #top-stories-section div div div div div div div a div img@alt"
-		
-	})(function(err, code) {
-		console.log(code);
 		res.json(code);
 	});
 });
 
 app.get("/lifestyle", function(req, res){
 	
-	x('http://www.nbcnews.com/pop-culture/lifestyle', {
+	idName ="#lifestyle-section";
+	
+	x('http://www.nbcnews.com/pop-culture/lifestyle', obj)(function(err, code) {
 		
-		news_main_link: "html body main #lifestyle-section #top-stories-section div div div div div div div a@href",
-		news_main_img: "html body main #lifestyle-section #top-stories-section div div div div div div img@src",
-		news_main_line: "html body main #lifestyle-section #top-stories-section div div div div div div div a div img@alt"
-		
-	})(function(err, code) {
-		console.log(code);
 		res.json(code);
 	});
 });
 
 app.get("/business", function(req, res){
 	
-	x('http://www.nbcnews.com/business', {
-		
-		news_main_link: "html body main #business-section #top-stories-section div div div div div div div a@href",
-		news_main_img: "html body main #business-section #top-stories-section div div div div div div img@src",
-		news_main_line: "html body main #business-section #top-stories-section div div div div div div div a div img@alt"
-		
-	})(function(err, code) {
-		console.log(code);
-		res.json(code);
-	});
-});
-
-app.get("/u", function(req, res){
+	idName ="#business-section";
 	
-	x('http://www.nbcnews.com/news/us-news', {
+	x('http://www.nbcnews.com/business', obj)(function(err, code) {
 		
-		news_main_link: "html body main #us-news-section #top-stories-section div div div div div div div a@href",
-		news_main_img: "html body main #us-news-section #top-stories-section div div div div div div img@src",
-		news_main_line: "html body main #us-news-section #top-stories-section div div div div div div div a div img@alt"
-		
-	})(function(err, code) {
-		console.log(code);
 		res.json(code);
 	});
 });
 
+app.get("/us", function(req, res){
+	
+	idName ="#us-news-section";
+	
+	x('http://www.nbcnews.com/news/us-news', obj)(function(err, code) {
+		
+		res.json(code);
+	});
 });
+
+//});
 app.listen(8080);

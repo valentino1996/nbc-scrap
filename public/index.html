@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<title>NBC News</title>
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.css"/>
 		<link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+		<script src="//code.jquery.com/jquery-2.1.0.js"></script>
 		<link rel='stylesheet' href='style.css'/>
 		<script src='main.js'></script>
 	
@@ -13,11 +15,13 @@
 	
 	<div id='header'>
 	
-	<h1>NBC NEWS</h1>
+	<h1 class="text-center">NBC NEWS</h1>
+	
+	<div class="row">
 	
 	<div class='col-md-2'></div>
 	
-		<div class='col-md-7'>
+		<div class='col-md-6'>
 			<p id='title'>Choose your favourite topics</p>
 				<div id='topics'>
 					<div id='first-row'>
@@ -40,15 +44,17 @@
 				
 		</div>
 		
-		<div class='col-md-3' id='profile'>
-			<button class='btn btn-info' id='twitter'><i class='fa fa-twitter'>Sign in with Twitter</i></button><br>
-			<button id='fav'><i class='fa fa-star'>Favourite</i></button><br>
-			<button id='like'><i class='fa fa-thumbs-up'>Likes</i></button><br>
+		<div class='col-md-4' id='profile'>
+			<button class='btn btn-info' id='twitter'><i class='fa fa-twitter'> Sign in with Twitter</i></button><br>
+			<button id='fav'><i class='fa fa-star'> Favourites</i></button><br>
+			<button id='like'><i class='fa fa-thumbs-up'> Likes</i></button><br>
+		</div>
+		
 		</div>
 		
 	</div>
 	
-	<p id='result'></p>
+	<p id='result'>Results:</p>
 	
 	</body>
 

@@ -1,7 +1,14 @@
+body{
+	-webkit-user-select: none;       
+	-moz-user-select: none;
+	-ms-user-select: none;
+}
+
 button{
 	background-color: transparent;
 	border: 1px solid black;
 	border-radius: 10px;
+	margin: 5px;
 	}
 	
 button:hover{
@@ -9,9 +16,30 @@ button:hover{
 	background-color: black;
 }
 
+#fav:hover{
+	background-color: #fc0 !important;
+}
+
+#like:hover{
+	background-color: #09f !important;
+}
+
 button:focus {outline:0;}
 	
 #first-row{
 	margin-top: 10px;
 	margin-bottom: 10px;
+}
+
+#header{
+	border-bottom: 1px solid black;
+}
+
+h1{
+	cursor: default;
+	font-size: 60px;
+}
+
+p{
+	cursor: default;
 }
