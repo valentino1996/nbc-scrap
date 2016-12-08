@@ -4,9 +4,17 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-	"start": "node index.js",
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "mongoose": "^4.7.2",
+    "passport": "^0.3.2",
+    "passport-twitter": "^1.0.4",
+    "x-ray": "^2.3.1"
+  }
 }
