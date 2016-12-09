@@ -417,6 +417,22 @@ $(document).ready(function(){
 		}
 		else{
 			console.log(id);
+			
+			$.ajax({
+				url:"/favourite",
+				type:"POST",
+				data:{
+					topic: id
+				},
+				success: function(topicData){
+					$(".star-btn").css("color","#ddd");
+					if(topicData!=""){
+						$("#"+id).css("color", "#fc0");
+						console.log("favourite topic");
+					}
+				}
+			});
+			
 			return;
 		}
 		

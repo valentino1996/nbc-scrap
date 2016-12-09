@@ -159,6 +159,41 @@ mongoose.connection.once("open", function(err){
 		
 	});
 	
+	app.post("/favourite", function(req, res){
+		
+		var favourite = req.body.topic;
+		
+		Db.findOne({username:userObj.username}, function(err, snippet){
+			
+			if(err||!snippet){
+				console.log(err);
+				return;
+			}
+			
+			if(snippet.favourite==favourite){
+				favourite="";
+				console.log(favourite);
+			}
+			
+			Db.findOneAndUpdate({username:userObj.username}, {favourite:favourite}, function(err, snippet){
+				
+				if(err||!snippet){
+					console.log(err);
+					return;
+				}
+				
+				res.json(snippet.favourite);
+				
+			});
+			
+		});
+		
+	});
+	
+	app.post("/likes", function(req, res){
+		
+	});
+	
 app.post("/twitter", function(req, res){
 	
 	if(userObj==''){
