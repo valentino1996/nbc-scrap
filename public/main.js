@@ -1,26 +1,40 @@
-var user_obj = {};
+var userObj='';
 var i;
 var id;
 var newsObj;
 $(document).ready(function(){
 	
+	$('#profile-page').hide();
+	
+	$('#x').on('click', function(){
+	$('#profile-page').hide();
+	$('#field').css("position", "static");
+	});
+	
 	$('#twitter').on('click', function(){
-		/*
-		if(user_obj = {}){
-			window.location = 'http://127.0.0.1:8080/auth/twitter';
-		}else{
+		
 		$.ajax({
 			url: '/twitter',
 			type: 'POST',
 			dataType: 'json',
 			success: function(obj){
-				user_obj = obj;
+				
+				if(obj.a==1){
+					window.location="http://127.0.0.1:8080/auth/twitter";
+				}
+				else{
+					userObj== obj;
+					console.log(obj);
+					$("#twitter").html("Profile Page");	
+					$("#display-name").html(obj.displayName);
+					$("#profile-image").prop("src", obj.photo);
+					console.log(obj.photo);
+					$('#profile-page').show();
+					$('#field').css("position", "fixed");
+				}
 				
 			}
 		});
-		}*/
-		
-		
 		
 	});
 	
@@ -336,8 +350,24 @@ $(document).ready(function(){
 
 });
 
-
-	$("#field").on("click", "i", function(){	
+	$("#field").on("click", "i", function(){
+		
+		$.ajax({
+		url:"/twitter",
+		type:"POST",
+		success: function(obj){
+		
+			if(obj.a==1){
+				window.location="http://127.0.0.1:8080/auth/twitter";
+			}
+			else{
+				userObj== obj;
+				console.log(obj);
+				$("#twitter").html("Profile Page");
+			}
+			
+		}
+	});
 	
 		id = $(this).prop('id');
 		
@@ -387,7 +417,10 @@ $(document).ready(function(){
 		}
 		else{
 			console.log(id);
+			return;
 		}
+		
+		
 		
 	});
 	
@@ -395,32 +428,33 @@ $(document).ready(function(){
 
 /*
 $(window).on("beforeunload", function(){
-	//if(user_obj=={}){
-		
-	//}
-	//else{
+	
 		$.ajax({
 			url:"/",
 			type:"POST",
 			dataType:"json",
 			data: {a:user_obj}
 		});
-	//}
+	
 });
-
+*/
 $(window).on("load", function(){
 	
-	console.log(user_obj);
-		
 	$.ajax({
-		url:"/",
+		url:"/twitter",
 		type:"POST",
-		dataType:"json",
 		success: function(obj){
-				user_obj = obj;
-				console.log(user_obj);
-			}
-		});
 		
+			if(obj.a==1){
+				console.log("User is not logged in");
+			}
+			else{
+				userObj== obj;
+				console.log(obj);
+				$("#twitter").html("Profile Page");
+			}
+			
+		}
 	});
-	*/
+	
+});

@@ -2,6 +2,7 @@
 <html>
 
 	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>NBC News</title>
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.css"/>
 		<link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
@@ -13,7 +14,7 @@
 	
 	<body>
 	
-	<div id="body">
+	<div id="body" class="container-fluid">
 	
 	<div id='header'>
 	
@@ -47,9 +48,7 @@
 		</div>
 		
 		<div class='col-md-4' id='profile'>
-			<button class='btn btn-info' id='twitter'><i class='fa fa-twitter'> Sign in with Twitter</i></button><br>
-			<button id='fav'><i class='fa fa-star'> Favourites</i></button><br>
-			<button id='like'><i class='fa fa-thumbs-up'> Likes</i></button><br>
+			<button class='btn btn-info' id='twitter'><i class='fa fa-twitter'> Sign in with Twitter</i></button>
 		</div>
 		
 		</div>
@@ -59,14 +58,46 @@
 	<div id='field'></div>
 	
 	</div>
-	<!--
+	
 	<div id="profile-page">
 		<div id="inner-field">
-			<h5>Profile Page</h5>
-			<button id="x" class="btn btn-danger">X</button>
+			<div class='col-md-4'></div>
+				<div class='col-md-4'>
+					
+					<div class='row'>
+						<div class='col-md-10'>
+							<h3>Profile Page</h3><br>
+						</div>
+						<div class='col-md-2'>
+							<button id="x" class="btn btn-danger">X</button><br>
+						</div>
+					</div>
+					
+					<div class='row'>
+						<div class='col-md-7'>
+							<img id="profile-image" src='https://amploprod.s3.amazonaws.com/assets/no-user-image-square-9f6a473a32ad639f619216331d10d61ce1b35c9271d5683920960e1a5ee45bb8.jpg' style='height: 50px; width: 50px;'></img>
+						</div>
+						<div class='col-md-5'>
+							<h3 id="display-name">Emri</h3><br>
+						</div>
+					</div>
+					
+					<div class='row'>
+						<div class='col-md-7'>
+							<button id='fav'><i class='fa fa-star'> Favourites</i></button>
+					</div>
+					<div class='col-md-5'>	
+						<button id='like'><i class='fa fa-thumbs-up'> Likes</i></button>
+					</div>
+				</div>
+				
+				<button class='btn btn-danger btn-block'>Deactivate</button>
+				
+				<div class='col-md-4'></div>
 		</div>
 	</div>
-	-->
+	</div>
+	
 	</body>
 
 </html>

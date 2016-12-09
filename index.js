@@ -21,7 +21,7 @@ app.use(session({
 }));
 
 var user="";
-var userObj;
+var userObj='';
 var token = '2538355556-GeEuOWBlO2wo7vi6zHq9nEOrfdGRIkZQT1wcW1P';
 var tokenSecret = 'fuSWRwwzBRVSQrskxEwSHIZoFBc0PJUydlkz94rLDyA9T';
 var idName ="";
@@ -84,7 +84,7 @@ var obj = {
 		
 	};
 
-/*
+
 mongoose.connect("mongodb://test:test@ds053156.mlab.com:53156/mongodb-test-valentino", function (err) {
 	
 	if (err) {
@@ -104,10 +104,17 @@ mongoose.connection.once("open", function(err){
 	}
 	
 	else{
-		//create snippet
+		
+		var schema = mongoose.Schema({
+			username: {type: String, unique:true},
+			favourite: {type: String},
+			likes: {type: Array}
+		});
+		
+		var Db = mongoose.model("NBC User", schema);
 		
 	}
-	*/
+	
 	passport.use(new TwitterStrategy({
 		consumerKey: '7yqe1MKJmAHBBV97lro32cZi9',
 		consumerSecret: 'F573BNj9Daj1ohAjnT2Q79EUPwXv0c14r2gbsQbuX23Ct6iL4E',
@@ -121,6 +128,16 @@ mongoose.connection.once("open", function(err){
 				displayName: profile.displayName,
 				photo: profile.photos[0].value
 			};
+			
+			Db.create({username: userObj.username, favourite:"", likes:[]}, function(err, snippet){
+				
+				if(err||!snippet){
+					console.log(err);
+					return;
+				}
+				console.log("Db created", snippet);
+				
+			});
 			
 			passport.serializeUser(function(user, done) {
 				done(null, user);
@@ -136,14 +153,20 @@ mongoose.connection.once("open", function(err){
 	));
 	
 	app.post("/", function(req, res){
-		userObj = req.body.a;
-		console.log(userObj);
-		//a\sares.send(userObj);
+		//userObj = req.body.a;
+		//console.log(userObj);
+		//res.send(userObj);
 		
 	});
 	
 app.post("/twitter", function(req, res){
+	
+	if(userObj==''){
+		res.json({a:1});
+		return;
+	}
 	res.json(userObj);
+	
 });
 
 app.get("/health", function(req, res){
@@ -263,5 +286,5 @@ app.get("/us", function(req, res){
                                      failureRedirect: '/login' }));
 	
 
-//});
+});
 app.listen(process.env.PORT||8080);

@@ -40,7 +40,7 @@ h1{
 	font-size: 60px;
 }
 
-p{
+p,h4{
 	cursor: default;
 }
 
@@ -101,8 +101,11 @@ a{
 	margin-left: 5px;
 }
 #profile-page{
-	position: absolute;
+	position: fixed;
 	width: 100%;
 	height: 100%;
-	background-color: #bbb;
+	background-color: white;
+}
+#field{
+	position:static;
 }
