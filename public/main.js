@@ -1,8 +1,11 @@
 var user_obj = {};
-
+var i;
+var id;
+var newsObj;
 $(document).ready(function(){
 	
 	$('#twitter').on('click', function(){
+		/*
 		if(user_obj = {}){
 			window.location = 'http://127.0.0.1:8080/auth/twitter';
 		}else{
@@ -15,7 +18,10 @@ $(document).ready(function(){
 				
 			}
 		});
-		}
+		}*/
+		
+		
+		
 	});
 	
 	$('#world').on('click', function(){
@@ -23,13 +29,25 @@ $(document).ready(function(){
 			url: '/world',
 			type: 'GET',
 			success: function(obj){
-				str = '<h2 class="text-center">World\t<i class="fa fa-star star-btn"></i></h2>';
+				newsObj=obj;
+				str = '<h2 class="text-center">World\t<i id="topic-world" class="fa fa-star star-btn"></i></h2>';
+				i=1;
 				Object.getOwnPropertyNames(obj).forEach(function(key) {
 					if(key == "one"){
-						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-3"><a href="' + obj[key].newsLink+ '" target="_blank"><img src="' + obj[key].img + '"></img></a></div><div class="col-md-6"><a href="' + obj[key].newsLink+ '" target="_blank"><p class="one">'+ obj[key].title +'</p></a></div><div class="col-md-1"><i class="fa fa-thumbs-up like-btn"></i></div></div></div>';
+						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-3"><a href="' +
+						obj[key].newsLink+ '" target="_blank"><img src="' +
+						obj[key].img + '"></img></a></div><div class="col-md-6"><a href="' +
+						obj[key].newsLink+ '" target="_blank"><p class="one">'+
+						obj[key].title +'</p></a></div><div class="col-md-1"><i id="1" class="fa fa-thumbs-up like-btn"></i></div></div></div>';
 					}
 					else{
-						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-3"><a href="' + obj[key].newsLink+ '" target="_blank"><img src="' + obj[key].img + '"></img></a></div><div class="col-md-6"><a href="' + obj[key].newsLink+ '" target="_blank"><p class="secondary">'+ obj[key].title +'</p></a></div><div class="col-md-1"><i class="fa fa-thumbs-up like-btn"></i></div></div></div>';
+						i++;
+						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-3"><a href="' +
+						obj[key].newsLink+ '" target="_blank"><img src="' +
+						obj[key].img + '"></img></a></div><div class="col-md-6"><a href="' +
+						obj[key].newsLink+ '" target="_blank"><p class="secondary">'+
+						obj[key].title +'</p></a></div><div class="col-md-1"><i id="'+
+						i+'" class="fa fa-thumbs-up like-btn"></i></div></div></div>';
 					}
 				});
 				$('#field').html(str);
@@ -42,13 +60,25 @@ $(document).ready(function(){
 			url: '/politics',
 			type: 'GET',
 			success: function(obj){
-				str = '<h2 class="text-center">Politics\t<i class="fa fa-star star-btn"></i></h2>';
+				newsObj=obj;
+				str = '<h2 class="text-center">Politics\t<i id="topic-politics" class="fa fa-star star-btn"></i></h2>';
+				i=1;
 				Object.getOwnPropertyNames(obj).forEach(function(key) {
 					if(key == "one"){
-						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-3"><a href="' + obj[key].newsLink+ '" target="_blank"><img src="' + obj[key].img + '"></img></a></div><div class="col-md-6"><a href="' + obj[key].newsLink+ '" target="_blank"><p class="one"">'+ obj[key].title +'</p></a></div><div class="col-md-1"><i class="fa fa-thumbs-up like-btn"></i></div></div></div>';
+						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-3"><a href="' +
+						obj[key].newsLink+ '" target="_blank"><img src="' +
+						obj[key].img + '"></img></a></div><div class="col-md-6"><a href="' +
+						obj[key].newsLink+ '" target="_blank"><p class="one"">'+
+						obj[key].title +'</p></a></div><div class="col-md-1"><i id="1" class="fa fa-thumbs-up like-btn"></i></div></div></div>';
 					}
 					else{
-						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-3"><a href="' + obj[key].newsLink+ '" target="_blank"><img src="' + obj[key].img + '"></img></a></div><div class="col-md-6"><a href="' + obj[key].newsLink+ '" target="_blank"><p class="secondary">'+ obj[key].title +'</p></a></div><div class="col-md-1"><i class="fa fa-thumbs-up like-btn"></i></div></div></div>';
+						i++;
+						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-3"><a href="' +
+						obj[key].newsLink+ '" target="_blank"><img src="' +
+						obj[key].img + '"></img></a></div><div class="col-md-6"><a href="' +
+						obj[key].newsLink+ '" target="_blank"><p class="secondary">'+
+						obj[key].title +'</p></a></div><div class="col-md-1"><i id="'+
+						i+'" class="fa fa-thumbs-up like-btn"></i></div></div></div>';
 					}
 				});
 				$('#field').html(str);
@@ -61,13 +91,25 @@ $(document).ready(function(){
 			url: '/invest',
 			type: 'GET',
 			success: function(obj){
-				str = '<h2 class="text-center">Investigations\t<i class="fa fa-star star-btn"></i></h2>';
+				newsObj=obj;
+				str = '<h2 class="text-center">Investigations\t<i id="topic-investigation" class="fa fa-star star-btn"></i></h2>';
+				i=1;
 				Object.getOwnPropertyNames(obj).forEach(function(key) {
 					if(key == "one"){
-						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-3"><a href="' + obj[key].newsLink+ '" target="_blank"><img src="' + obj[key].img + '"></img></a></div><div class="col-md-6"><a href="' + obj[key].newsLink+ '" target="_blank"><p class="one">'+ obj[key].title +'</p></a></div><div class="col-md-1"><i class="fa fa-thumbs-up like-btn"></i></div></div></div>';
+						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-3"><a href="' +
+						obj[key].newsLink+ '" target="_blank"><img src="' +
+						obj[key].img + '"></img></a></div><div class="col-md-6"><a href="' +
+						obj[key].newsLink+ '" target="_blank"><p class="one">'+
+						obj[key].title +'</p></a></div><div class="col-md-1"><i id="1" class="fa fa-thumbs-up like-btn"></i></div></div></div>';
 					}
 					else{
-						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-3"><a href="' + obj[key].newsLink+ '" target="_blank"><img src="' + obj[key].img + '"></img></a></div><div class="col-md-6"><a href="' + obj[key].newsLink+ '" target="_blank"><p class="secondary">'+ obj[key].title +'</p></a></div><div class="col-md-1"><i class="fa fa-thumbs-up like-btn"></i></div></div></div>';
+						i++;
+						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-3"><a href="' +
+						obj[key].newsLink+ '" target="_blank"><img src="' +
+						obj[key].img + '"></img></a></div><div class="col-md-6"><a href="' +
+						obj[key].newsLink+ '" target="_blank"><p class="secondary">'+
+						obj[key].title +'</p></a></div><div class="col-md-1"><i id="'+
+						i+'" class="fa fa-thumbs-up like-btn"></i></div></div></div>';
 					}
 				});
 			$('#field').html(str);
@@ -80,13 +122,25 @@ $(document).ready(function(){
 			url: '/health',
 			type: 'GET',
 			success: function(obj){
-				str = '<h2 class="text-center">Health\t<i class="fa fa-star star-btn"></i></h2>';
+				newsObj=obj;
+				str = '<h2 class="text-center">Health\t<i id="topic-health" class="fa fa-star star-btn"></i></h2>';
+				i=1;
 				Object.getOwnPropertyNames(obj).forEach(function(key) {
 					if(key == "one"){
-						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-3"><a href="' + obj[key].newsLink+ '" target="_blank"><img src="' + obj[key].img + '"></img></a></div><div class="col-md-6"><a href="' + obj[key].newsLink+ '" target="_blank"><p class="one">'+ obj[key].title +'</p></a></div><div class="col-md-1"><i class="fa fa-thumbs-up like-btn"></i></div></div></div>';
+						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-3"><a href="' +
+						obj[key].newsLink+ '" target="_blank"><img src="' +
+						obj[key].img + '"></img></a></div><div class="col-md-6"><a href="' +
+						obj[key].newsLink+ '" target="_blank"><p class="one">'+
+						obj[key].title +'</p></a></div><div class="col-md-1"><i id="1" class="fa fa-thumbs-up like-btn"></i></div></div></div>';
 					}
 					else{
-						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-3"><a href="' + obj[key].newsLink+ '" target="_blank"><img src="' + obj[key].img + '"></img></a></div><div class="col-md-6"><a href="' + obj[key].newsLink+ '" target="_blank"><p class="secondary">'+ obj[key].title +'</p></a></div><div class="col-md-1"><i class="fa fa-thumbs-up like-btn"></i></div></div></div>';
+						i++;
+						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-3"><a href="' +
+						obj[key].newsLink+ '" target="_blank"><img src="' +
+						obj[key].img + '"></img></a></div><div class="col-md-6"><a href="' +
+						obj[key].newsLink+ '" target="_blank"><p class="secondary">'+
+						obj[key].title +'</p></a></div><div class="col-md-1"><i id="'+
+						i+'" class="fa fa-thumbs-up like-btn"></i></div></div></div>';
 					}
 				});
 				$('#field').html(str);
@@ -99,13 +153,25 @@ $(document).ready(function(){
 			url: '/tech',
 			type: 'GET',
 			success: function(obj){
-				str = '<h2 class="text-center">Tech\t<i class="fa fa-star star-btn"></i></h2>';
+				newsObj=obj;
+				str = '<h2 class="text-center">Tech\t<i id="topic-tech" class="fa fa-star star-btn"></i></h2>';
+				i=1;
 				Object.getOwnPropertyNames(obj).forEach(function(key) {
 					if(key == "one"){
-						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-3"><a href="' + obj[key].newsLink+ '" target="_blank"><img src="' + obj[key].img + '"></img></a></div><div class="col-md-6"><a href="' + obj[key].newsLink+ '" target="_blank"><p class="one">'+ obj[key].title +'</p></a></div><div class="col-md-1"><i class="fa fa-thumbs-up like-btn"></i></div></div></div>';
+						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-3"><a href="' +
+						obj[key].newsLink+ '" target="_blank"><img src="' +
+						obj[key].img + '"></img></a></div><div class="col-md-6"><a href="' +
+						obj[key].newsLink+ '" target="_blank"><p class="one">'+
+						obj[key].title +'</p></a></div><div class="col-md-1"><i id="1" class="fa fa-thumbs-up like-btn"></i></div></div></div>';
 					}
 					else{
-						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-3"><a href="' + obj[key].newsLink+ '" target="_blank"><img src="' + obj[key].img + '"></img></a></div><div class="col-md-6"><a href="' + obj[key].newsLink+ '" target="_blank"><p class="secondary">'+ obj[key].title +'</p></a></div><div class="col-md-1"><i class="fa fa-thumbs-up like-btn"></i></div></div></div>';
+						i++;
+						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-3"><a href="' +
+						obj[key].newsLink+ '" target="_blank"><img src="' +
+						obj[key].img + '"></img></a></div><div class="col-md-6"><a href="' +
+						obj[key].newsLink+ '" target="_blank"><p class="secondary">'+
+						obj[key].title +'</p></a></div><div class="col-md-1"><i id="'+
+						i+'" class="fa fa-thumbs-up like-btn"></i></div></div></div>';
 					}
 				});
 				$('#field').html(str);
@@ -118,13 +184,25 @@ $(document).ready(function(){
 			url: '/science',
 			type: 'GET',
 			success: function(obj){
-				str = '<h2 class="text-center">Science\t<i class="fa fa-star star-btn"></i></h2>';
+				newsObj=obj;
+				str = '<h2 class="text-center">Science\t<i id="topic-science" class="fa fa-star star-btn"></i></h2>';
+				i=1;
 				Object.getOwnPropertyNames(obj).forEach(function(key) {
 					if(key == "one"){
-						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-3"><a href="' + obj[key].newsLink+ '" target="_blank"><img src="' + obj[key].img + '"></img></a></div><div class="col-md-6"><a href="' + obj[key].newsLink+ '" target="_blank"><p class="one">'+ obj[key].title +'</p></a></div><div class="col-md-1"><i class="fa fa-thumbs-up like-btn"></i></div></div></div>';
+						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-3"><a href="' +
+						obj[key].newsLink+ '" target="_blank"><img src="' +
+						obj[key].img + '"></img></a></div><div class="col-md-6"><a href="' +
+						obj[key].newsLink+ '" target="_blank"><p class="one">'+
+						obj[key].title +'</p></a></div><div class="col-md-1"><i id="1" class="fa fa-thumbs-up like-btn"></i></div></div></div>';
 					}
 					else{
-						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-3"><a href="' + obj[key].newsLink+ '" target="_blank"><img src="' + obj[key].img + '"></img></a></div><div class="col-md-6"><a href="' + obj[key].newsLink+ '" target="_blank"><p class="secondary">'+ obj[key].title +'</p></a></div><div class="col-md-1"><i class="fa fa-thumbs-up like-btn"></i></div></div></div>';
+						i++;
+						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-3"><a href="' +
+						obj[key].newsLink+ '" target="_blank"><img src="' +
+						obj[key].img + '"></img></a></div><div class="col-md-6"><a href="' +
+						obj[key].newsLink+ '" target="_blank"><p class="secondary">'+
+						obj[key].title +'</p></a></div><div class="col-md-1"><i id="'+
+						i+'" class="fa fa-thumbs-up like-btn"></i></div></div></div>';
 					}
 				});
 				$('#field').html(str);
@@ -137,13 +215,25 @@ $(document).ready(function(){
 			url: '/popculture',
 			type: 'GET',
 			success: function(obj){
-				str = '<h2 class="text-center">Pop-Culture\t<i class="fa fa-star star-btn"></i></h2>';
+				newsObj=obj;
+				str = '<h2 class="text-center">Pop-Culture\t<i id="topic-pop-culture" class="fa fa-star star-btn"></i></h2>';
+				i=1;
 				Object.getOwnPropertyNames(obj).forEach(function(key) {
 					if(key == "one"){
-						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-3"><a href="' + obj[key].newsLink+ '" target="_blank"><img src="' + obj[key].img + '"></img></a></div><div class="col-md-6"><a href="' + obj[key].newsLink+ '" target="_blank"><p class="one">'+ obj[key].title +'</p></a></div><div class="col-md-1"><i class="fa fa-thumbs-up like-btn"></i></div></div></div>';
+						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-3"><a href="' +
+						obj[key].newsLink+ '" target="_blank"><img src="' +
+						obj[key].img + '"></img></a></div><div class="col-md-6"><a href="' +
+						obj[key].newsLink+ '" target="_blank"><p class="one">'+
+						obj[key].title +'</p></a></div><div class="col-md-1"><i id="1" class="fa fa-thumbs-up like-btn"></i></div></div></div>';
 					}
 					else{
-						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-3"><a href="' + obj[key].newsLink+ '" target="_blank"><img src="' + obj[key].img + '"></img></a></div><div class="col-md-6"><a href="' + obj[key].newsLink+ '" target="_blank"><p class="secondary">'+ obj[key].title +'</p></a></div><div class="col-md-1"><i class="fa fa-thumbs-up like-btn"></i></div></div></div>';
+						i++;
+						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-3"><a href="' +
+						obj[key].newsLink+ '" target="_blank"><img src="' +
+						obj[key].img + '"></img></a></div><div class="col-md-6"><a href="' +
+						obj[key].newsLink+ '" target="_blank"><p class="secondary">'+
+						obj[key].title +'</p></a></div><div class="col-md-1"><i id="'+
+						i+'" class="fa fa-thumbs-up like-btn"></i></div></div></div>';
 					}
 				});
 				$('#field').html(str);
@@ -156,13 +246,25 @@ $(document).ready(function(){
 			url: '/lifestyle',
 			type: 'GET',
 			success: function(obj){
-				str = '<h2 class="text-center">Lifestyle\t<i class="fa fa-star star-btn"></i></h2>';
+				newsObj=obj;
+				str = '<h2 class="text-center">Lifestyle\t<i id="topic-lifestyle" class="fa fa-star star-btn"></i></h2>';
+				i=1;
 				Object.getOwnPropertyNames(obj).forEach(function(key) {
 					if(key == "one"){
-						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-3"><a href="' + obj[key].newsLink+ '" target="_blank"><img src="' + obj[key].img + '"></img></a></div><div class="col-md-6"><a href="' + obj[key].newsLink+ '" target="_blank"><p class="one">'+ obj[key].title +'</p></a></div><div class="col-md-1"><i class="fa fa-thumbs-up like-btn"></i></div></div></div>';
+						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-3"><a href="' +
+						obj[key].newsLink+ '" target="_blank"><img src="' +
+						obj[key].img + '"></img></a></div><div class="col-md-6"><a href="' +
+						obj[key].newsLink+ '" target="_blank"><p class="one">'+
+						obj[key].title +'</p></a></div><div class="col-md-1"><i id="1" class="fa fa-thumbs-up like-btn"></i></div></div></div>';
 					}
 					else{
-						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-3"><a href="' + obj[key].newsLink+ '" target="_blank"><img src="' + obj[key].img + '"></img></a></div><div class="col-md-6"><a href="' + obj[key].newsLink+ '" target="_blank"><p class="secondary">'+ obj[key].title +'</p></a></div><div class="col-md-1"><i class="fa fa-thumbs-up like-btn"></i></div></div></div>';
+						i++;
+						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-3"><a href="' +
+						obj[key].newsLink+ '" target="_blank"><img src="' +
+						obj[key].img + '"></img></a></div><div class="col-md-6"><a href="' +
+						obj[key].newsLink+ '" target="_blank"><p class="secondary">'+
+						obj[key].title +'</p></a></div><div class="col-md-1"><i id="'+
+						i+'" class="fa fa-thumbs-up like-btn"></i></div></div></div>';
 					}
 				});
 				$('#field').html(str);
@@ -175,13 +277,25 @@ $(document).ready(function(){
 			url: '/business',
 			type: 'GET',
 			success: function(obj){
-				str = '<h2 class="text-center">Business\t<i class="fa fa-star star-btn"></i></h2>';
+				newsObj=obj;
+				str = '<h2 class="text-center">Business\t<i id="topic-business" class="fa fa-star star-btn"></i></h2>';
+				i=1;
 				Object.getOwnPropertyNames(obj).forEach(function(key) {
 					if(key == "one"){
-						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-3"><a href="' + obj[key].newsLink+ '" target="_blank"><img src="' + obj[key].img + '"></img></a></div><div class="col-md-6"><a href="' + obj[key].newsLink+ '" target="_blank"><p class="one">'+ obj[key].title +'</p></a></div><div class="col-md-1"><i class="fa fa-thumbs-up like-btn"></i></div></div></div>';
+						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-3"><a href="' +
+						obj[key].newsLink+ '" target="_blank"><img src="' +
+						obj[key].img + '"></img></a></div><div class="col-md-6"><a href="' +
+						obj[key].newsLink+ '" target="_blank"><p class="one">'+
+						obj[key].title +'</p></a></div><div class="col-md-1"><i id="1" class="fa fa-thumbs-up like-btn"></i></div></div></div>';
 					}
 					else{
-						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-3"><a href="' + obj[key].newsLink+ '" target="_blank"><img src="' + obj[key].img + '"></img></a></div><div class="col-md-6"><a href="' + obj[key].newsLink+ '" target="_blank"><p class="secondary">'+ obj[key].title +'</p></a></div><div class="col-md-1"><i class="fa fa-thumbs-up like-btn"></i></div></div></div>';
+						i++;
+						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-3"><a href="' +
+						obj[key].newsLink+ '" target="_blank"><img src="' +
+						obj[key].img + '"></img></a></div><div class="col-md-6"><a href="' +
+						obj[key].newsLink+ '" target="_blank"><p class="secondary">'+
+						obj[key].title +'</p></a></div><div class="col-md-1"><i id="'+
+						i+'" class="fa fa-thumbs-up like-btn"></i></div></div></div>';
 					}
 				});
 				$('#field').html(str);
@@ -194,42 +308,92 @@ $(document).ready(function(){
 			url: '/us',
 			type: 'GET',
 			success: function(obj){
-				str = '<h2 class="text-center">US-News\t<i class="fa fa-star star-btn"></i></h2>';
+				newsObj=obj;
+				str = '<h2 class="text-center">US-News\t<i id="topic-us" class="fa fa-star star-btn"></i></h2>';
+				i=1;
 				Object.getOwnPropertyNames(obj).forEach(function(key) {
 					if(key == "one"){
-						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-3"><a href="' + obj[key].newsLink+ '" target="_blank"><img src="' + obj[key].img + '"></img></a></div><div class="col-md-6"><a href="' + obj[key].newsLink+ '" target="_blank"><p class="one">'+ obj[key].title +'</p></a></div><div class="col-md-1"><i class="fa fa-thumbs-up like-btn"></i></div></div></div>';
+						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-3"><a href="' +
+						obj[key].newsLink+ '" target="_blank"><img src="' +
+						obj[key].img + '"></img></a></div><div class="col-md-6"><a href="' +
+						obj[key].newsLink+ '" target="_blank"><p class="one">'
+						+ obj[key].title +'</p></a></div><div class="col-md-1"><i id="1" class="fa fa-thumbs-up like-btn"></i></div></div></div>';
 					}
 					else{
-						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-3"><a href="' + obj[key].newsLink+ '" target="_blank"><img src="' + obj[key].img + '"></img></a></div><div class="col-md-6"><a href="' + obj[key].newsLink+ '" target="_blank"><p class="secondary">'+ obj[key].title +'</p></a></div><div class="col-md-1"><i class="fa fa-thumbs-up like-btn"></i></div></div></div>';
+						i++;
+						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-3"><a href="' +
+						obj[key].newsLink+ '" target="_blank"><img src="' +
+						obj[key].img + '"></img></a></div><div class="col-md-6"><a href="' +
+						obj[key].newsLink+ '" target="_blank"><p class="secondary">'+
+						obj[key].title +'</p></a></div><div class="col-md-1"><i id="'+
+						i+'" class="fa fa-thumbs-up like-btn"></i></div></div></div>';
 					}
 				});
+				
 				$('#field').html(str);
-			}
-		});
-	});
-	
-	$('.fa-start-o').on('click', function(){
-		$.ajax({
-			url: '/favourite',
-			type: 'POST',
-			success: function(result){
-				console.log(result);
-			}
-		});
-	});
-	
-	$('.fa-thumbs-up').on('click', function(){
-		$.ajax({
-		url: '/like',
-		type: 'POST',
-		success: function(result){
-			console.log(result);
 		}
 	});
-	
-});
+
 });
 
+
+	$("#field").on("click", "i", function(){	
+	
+		id = $(this).prop('id');
+		
+		if(id==1){
+			id="one";
+			console.log(newsObj[id].title);
+		}
+		else if(id==2){
+			id="two";
+			console.log(newsObj[id].title);
+			
+		}
+		else if(id==3){
+			id="three";
+			console.log(newsObj[id].title);
+			
+		}
+		else if(id==4){
+			id="four";
+			console.log(newsObj[id].title);
+			
+		}
+		else if(id==5){
+			id="five";
+			console.log(newsObj[id].title);
+			
+		}
+		else if(id==6){
+			id="six";
+			console.log(newsObj[id].title);
+			
+		}
+		else if(id==7){
+			id="seven";
+			console.log(newsObj[id].title);
+			
+		}
+		else if(id==8){
+			id="eight";
+			console.log(newsObj[id].title);
+			
+		}
+		else if(id==9){
+			id="nine";
+			console.log(newsObj[id].title);
+			
+		}
+		else{
+			console.log(id);
+		}
+		
+	});
+	
+});
+
+/*
 $(window).on("beforeunload", function(){
 	//if(user_obj=={}){
 		
@@ -259,3 +423,4 @@ $(window).on("load", function(){
 		});
 		
 	});
+	*/

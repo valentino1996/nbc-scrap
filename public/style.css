@@ -100,3 +100,9 @@ a{
 	font-size: 40px;
 	margin-left: 5px;
 }
+#profile-page{
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background-color: #bbb;
+}
