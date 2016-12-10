@@ -2,14 +2,54 @@ var userObj='';
 var i;
 var id;
 var newsObj;
+var arr = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
+var favString="";
+
 $(document).ready(function(){
 	
 	$('#profile-page').hide();
 	
 	$('#x').on('click', function(){
-	$('#profile-page').hide();
-	$('#field').css("position", "static");
+		$('#profile-page').hide();
+		$('#field').css("position", "static");
 	});
+	
+	$("#deactivate").on("click", function(){
+		
+		$.ajax({
+			url:"/deactivate",
+			type:"POST",
+			data:{
+				user:userObj.username
+			},
+			success: function(){
+				$("#twitter").html("<i class='fa fa-twitter'> Sign in with Twitter");	
+				window.location = "http://nbc-news-scrap.herokuapp.com";
+			}
+		});
+		
+	});
+	
+	$('#like').on('click', function(){
+		$.ajax({
+			url: '/liked',
+			type: 'GET',
+			success: function(array){
+				str ='';
+				for(var j = 0; j < array.length; j++){
+				 	str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-4"><a href="' +
+						array[j].newsLink+ '" target="_blank"><img src="' +
+						array[j].img + '"></img></a></div><div class="col-md-5"><a href="' +
+						array[j].newsLink+ '" target="_blank"><p class="one">'+
+						array[j].title +'</p></a></div><div class="col-md-1"><i id="1" class="fa fa-thumbs-up like-btn"></i></div></div></div>';
+					}
+					console.log(str);
+					$('#field').html(str);
+					$(".like-btn").css("color", "#09f");
+					$("#x").trigger("click");
+				}
+			});
+		});
 	
 	$('#twitter').on('click', function(){
 		
@@ -23,12 +63,18 @@ $(document).ready(function(){
 					window.location="http://nbc-news-scrap.herokuapp.com/auth/twitter";
 				}
 				else{
-					userObj== obj;
-					console.log(obj);
+					userObj== obj.key1;
+					
 					$("#twitter").html("Profile Page");	
-					$("#display-name").html(obj.displayName);
-					$("#profile-image").prop("src", obj.photo);
-					console.log(obj.photo);
+					$("#display-name").html(obj.key1.displayName);
+					$("#profile-image").prop("src", obj.key1.photo);
+					
+					favString="<h5>Favourite Topics :</h5>";
+					
+					for(var j=0; j<obj.key2.length; j++){
+						favString += '<h6>'+obj.key2[j]+'</h6>';
+					}
+					$("#fav-text").html(favString);
 					$('#profile-page').show();
 					$('#field').css("position", "fixed");
 				}
@@ -43,28 +89,61 @@ $(document).ready(function(){
 			url: '/world',
 			type: 'GET',
 			success: function(obj){
-				newsObj=obj;
+				newsObj=obj.key1;
 				str = '<h2 class="text-center">World\t<i id="topic-world" class="fa fa-star star-btn"></i></h2>';
 				i=1;
-				Object.getOwnPropertyNames(obj).forEach(function(key) {
+				Object.getOwnPropertyNames(obj.key1).forEach(function(key) {
 					if(key == "one"){
-						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-3"><a href="' +
-						obj[key].newsLink+ '" target="_blank"><img src="' +
-						obj[key].img + '"></img></a></div><div class="col-md-6"><a href="' +
-						obj[key].newsLink+ '" target="_blank"><p class="one">'+
-						obj[key].title +'</p></a></div><div class="col-md-1"><i id="1" class="fa fa-thumbs-up like-btn"></i></div></div></div>';
+						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-4"><a href="' +
+						obj.key1[key].newsLink+ '" target="_blank"><img src="' +
+						obj.key1[key].img + '"></img></a></div><div class="col-md-5"><a href="' +
+						obj.key1[key].newsLink+ '" target="_blank"><p class="one">'+
+						obj.key1[key].title +'</p></a></div><div class="col-md-1"><i id="1" class="fa fa-thumbs-up like-btn"></i></div></div></div>';
 					}
 					else{
 						i++;
-						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-3"><a href="' +
-						obj[key].newsLink+ '" target="_blank"><img src="' +
-						obj[key].img + '"></img></a></div><div class="col-md-6"><a href="' +
-						obj[key].newsLink+ '" target="_blank"><p class="secondary">'+
-						obj[key].title +'</p></a></div><div class="col-md-1"><i id="'+
+						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-4"><a href="' +
+						obj.key1[key].newsLink+ '" target="_blank"><img src="' +
+						obj.key1[key].img + '"></img></a></div><div class="col-md-4"><a href="' +
+						obj.key1[key].newsLink+ '" target="_blank"><p class="secondary">'+
+						obj.key1[key].title +'</p></a></div><div class="col-md-1"><i id="'+
 						i+'" class="fa fa-thumbs-up like-btn"></i></div></div></div>';
 					}
 				});
 				$('#field').html(str);
+				
+				for (var j=0; j<obj.key2.length; j++){
+				
+					if(obj.key2[j]=="topic-world"){
+						$("#topic-world").css("color", "#fc0");
+						j=obj.key2.length;
+					}
+				}
+				
+				Object.getOwnPropertyNames(obj.key1).forEach(function(key) {
+					
+					for (var k=0; k<obj.key3.length; k++){
+					
+					if(obj.key1[key].title==obj.key3[k]){
+						$("#"+String(arr.indexOf(key)+1)).css("color", "#09f");
+						$("#"+String(arr.indexOf(key)+1)).hover(function(){
+						$(this).css("color", "#09f");
+						}, function(){
+						$(this).css("color", "#09f");
+					});
+						k=obj.key3.length;
+					}
+					else{
+					$("#"+String(arr.indexOf(key)+1)).hover(function(){
+					$(this).css("color", "#09f");
+					}, function(){
+					$(this).css("color", "#ddd");
+					});
+					}
+					}
+					
+				});
+				
 			}
 		});
 	});
@@ -74,28 +153,61 @@ $(document).ready(function(){
 			url: '/politics',
 			type: 'GET',
 			success: function(obj){
-				newsObj=obj;
+				newsObj=obj.key1;
 				str = '<h2 class="text-center">Politics\t<i id="topic-politics" class="fa fa-star star-btn"></i></h2>';
 				i=1;
-				Object.getOwnPropertyNames(obj).forEach(function(key) {
+				Object.getOwnPropertyNames(obj.key1).forEach(function(key) {
 					if(key == "one"){
-						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-3"><a href="' +
-						obj[key].newsLink+ '" target="_blank"><img src="' +
-						obj[key].img + '"></img></a></div><div class="col-md-6"><a href="' +
-						obj[key].newsLink+ '" target="_blank"><p class="one"">'+
-						obj[key].title +'</p></a></div><div class="col-md-1"><i id="1" class="fa fa-thumbs-up like-btn"></i></div></div></div>';
+						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-4"><a href="' +
+						obj.key1[key].newsLink+ '" target="_blank"><img src="' +
+						obj.key1[key].img + '"></img></a></div><div class="col-md-5"><a href="' +
+						obj.key1[key].newsLink+ '" target="_blank"><p class="one"">'+
+						obj.key1[key].title +'</p></a></div><div class="col-md-1"><i id="1" class="fa fa-thumbs-up like-btn"></i></div></div></div>';
 					}
 					else{
 						i++;
-						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-3"><a href="' +
-						obj[key].newsLink+ '" target="_blank"><img src="' +
-						obj[key].img + '"></img></a></div><div class="col-md-6"><a href="' +
-						obj[key].newsLink+ '" target="_blank"><p class="secondary">'+
-						obj[key].title +'</p></a></div><div class="col-md-1"><i id="'+
+						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-4"><a href="' +
+						obj.key1[key].newsLink+ '" target="_blank"><img src="' +
+						obj.key1[key].img + '"></img></a></div><div class="col-md-5"><a href="' +
+						obj.key1[key].newsLink+ '" target="_blank"><p class="secondary">'+
+						obj.key1[key].title +'</p></a></div><div class="col-md-1"><i id="'+
 						i+'" class="fa fa-thumbs-up like-btn"></i></div></div></div>';
 					}
 				});
 				$('#field').html(str);
+				
+				for (var j=0; j<obj.key2.length; j++){
+				
+					if(obj.key2[j]=="topic-politics"){
+						$("#topic-politics").css("color", "#fc0");
+						j=obj.key2.length;
+					}
+				}
+				
+				Object.getOwnPropertyNames(obj.key1).forEach(function(key) {
+					
+					for (var k=0; k<obj.key3.length; k++){
+					
+					if(obj.key1[key].title==obj.key3[k]){
+						$("#"+String(arr.indexOf(key)+1)).css("color", "#09f");
+						$("#"+String(arr.indexOf(key)+1)).hover(function(){
+						$(this).css("color", "#09f");
+						}, function(){
+						$(this).css("color", "#09f");
+					});
+						k=obj.key3.length;
+					}
+					else{
+					$("#"+String(arr.indexOf(key)+1)).hover(function(){
+					$(this).css("color", "#09f");
+					}, function(){
+					$(this).css("color", "#ddd");
+					});
+					}
+					}
+					
+				});
+				
 			}
 		});
 	});
@@ -105,28 +217,61 @@ $(document).ready(function(){
 			url: '/invest',
 			type: 'GET',
 			success: function(obj){
-				newsObj=obj;
+				newsObj=obj.key1;
 				str = '<h2 class="text-center">Investigations\t<i id="topic-investigation" class="fa fa-star star-btn"></i></h2>';
 				i=1;
-				Object.getOwnPropertyNames(obj).forEach(function(key) {
+				Object.getOwnPropertyNames(obj.key1).forEach(function(key) {
 					if(key == "one"){
-						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-3"><a href="' +
-						obj[key].newsLink+ '" target="_blank"><img src="' +
-						obj[key].img + '"></img></a></div><div class="col-md-6"><a href="' +
-						obj[key].newsLink+ '" target="_blank"><p class="one">'+
-						obj[key].title +'</p></a></div><div class="col-md-1"><i id="1" class="fa fa-thumbs-up like-btn"></i></div></div></div>';
+						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-4"><a href="' +
+						obj.key1[key].newsLink+ '" target="_blank"><img src="' +
+						obj.key1[key].img + '"></img></a></div><div class="col-md-5"><a href="' +
+						obj.key1[key].newsLink+ '" target="_blank"><p class="one">'+
+						obj.key1[key].title +'</p></a></div><div class="col-md-1"><i id="1" class="fa fa-thumbs-up like-btn"></i></div></div></div>';
 					}
 					else{
 						i++;
-						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-3"><a href="' +
-						obj[key].newsLink+ '" target="_blank"><img src="' +
-						obj[key].img + '"></img></a></div><div class="col-md-6"><a href="' +
-						obj[key].newsLink+ '" target="_blank"><p class="secondary">'+
-						obj[key].title +'</p></a></div><div class="col-md-1"><i id="'+
+						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-4"><a href="' +
+						obj.key1[key].newsLink+ '" target="_blank"><img src="' +
+						obj.key1[key].img + '"></img></a></div><div class="col-md-5"><a href="' +
+						obj.key1[key].newsLink+ '" target="_blank"><p class="secondary">'+
+						obj.key1[key].title +'</p></a></div><div class="col-md-1"><i id="'+
 						i+'" class="fa fa-thumbs-up like-btn"></i></div></div></div>';
 					}
 				});
 			$('#field').html(str);
+				
+				for (var j=0; j<obj.key2.length; j++){
+				
+					if(obj.key2[j]=="topic-investigation"){
+						$("#topic-investigation").css("color", "#fc0");
+						j=obj.key2.length;
+					}
+				}
+				
+				Object.getOwnPropertyNames(obj.key1).forEach(function(key) {
+					
+					for (var k=0; k<obj.key3.length; k++){
+					
+					if(obj.key1[key].title==obj.key3[k]){
+						$("#"+String(arr.indexOf(key)+1)).css("color", "#09f");
+						$("#"+String(arr.indexOf(key)+1)).hover(function(){
+						$(this).css("color", "#09f");
+						}, function(){
+						$(this).css("color", "#09f");
+					});
+						k=obj.key3.length;
+					}
+					else{
+					$("#"+String(arr.indexOf(key)+1)).hover(function(){
+					$(this).css("color", "#09f");
+					}, function(){
+					$(this).css("color", "#ddd");
+					});
+					}
+					}
+					
+				});
+				
 			}
 		});
 	});
@@ -136,28 +281,61 @@ $(document).ready(function(){
 			url: '/health',
 			type: 'GET',
 			success: function(obj){
-				newsObj=obj;
+				newsObj=obj.key1;
 				str = '<h2 class="text-center">Health\t<i id="topic-health" class="fa fa-star star-btn"></i></h2>';
 				i=1;
-				Object.getOwnPropertyNames(obj).forEach(function(key) {
+				Object.getOwnPropertyNames(obj.key1).forEach(function(key) {
 					if(key == "one"){
-						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-3"><a href="' +
-						obj[key].newsLink+ '" target="_blank"><img src="' +
-						obj[key].img + '"></img></a></div><div class="col-md-6"><a href="' +
-						obj[key].newsLink+ '" target="_blank"><p class="one">'+
-						obj[key].title +'</p></a></div><div class="col-md-1"><i id="1" class="fa fa-thumbs-up like-btn"></i></div></div></div>';
+						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-4"><a href="' +
+						obj.key1[key].newsLink+ '" target="_blank"><img src="' +
+						obj.key1[key].img + '"></img></a></div><div class="col-md-5"><a href="' +
+						obj.key1[key].newsLink+ '" target="_blank"><p class="one">'+
+						obj.key1[key].title +'</p></a></div><div class="col-md-1"><i id="1" class="fa fa-thumbs-up like-btn"></i></div></div></div>';
 					}
 					else{
 						i++;
-						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-3"><a href="' +
-						obj[key].newsLink+ '" target="_blank"><img src="' +
-						obj[key].img + '"></img></a></div><div class="col-md-6"><a href="' +
-						obj[key].newsLink+ '" target="_blank"><p class="secondary">'+
-						obj[key].title +'</p></a></div><div class="col-md-1"><i id="'+
+						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-4"><a href="' +
+						obj.key1[key].newsLink+ '" target="_blank"><img src="' +
+						obj.key1[key].img + '"></img></a></div><div class="col-md-5"><a href="' +
+						obj.key1[key].newsLink+ '" target="_blank"><p class="secondary">'+
+						obj.key1[key].title +'</p></a></div><div class="col-md-1"><i id="'+
 						i+'" class="fa fa-thumbs-up like-btn"></i></div></div></div>';
 					}
 				});
 				$('#field').html(str);
+				
+				for (var j=0; j<obj.key2.length; j++){
+				
+					if(obj.key2[j]=="topic-health"){
+						$("#topic-health").css("color", "#fc0");
+						j=obj.key2.length;
+					}
+				}
+				
+				Object.getOwnPropertyNames(obj.key1).forEach(function(key) {
+					
+					for (var k=0; k<obj.key3.length; k++){
+					
+					if(obj.key1[key].title==obj.key3[k]){
+						$("#"+String(arr.indexOf(key)+1)).css("color", "#09f");
+						$("#"+String(arr.indexOf(key)+1)).hover(function(){
+						$(this).css("color", "#09f");
+						}, function(){
+						$(this).css("color", "#09f");
+					});
+						k=obj.key3.length;
+					}
+					else{
+					$("#"+String(arr.indexOf(key)+1)).hover(function(){
+					$(this).css("color", "#09f");
+					}, function(){
+					$(this).css("color", "#ddd");
+					});
+					}
+					}
+					
+				});
+				
 			}
 		});
 	});
@@ -167,28 +345,61 @@ $(document).ready(function(){
 			url: '/tech',
 			type: 'GET',
 			success: function(obj){
-				newsObj=obj;
+				newsObj=obj.key1;
 				str = '<h2 class="text-center">Tech\t<i id="topic-tech" class="fa fa-star star-btn"></i></h2>';
 				i=1;
-				Object.getOwnPropertyNames(obj).forEach(function(key) {
+				Object.getOwnPropertyNames(obj.key1).forEach(function(key) {
 					if(key == "one"){
-						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-3"><a href="' +
-						obj[key].newsLink+ '" target="_blank"><img src="' +
-						obj[key].img + '"></img></a></div><div class="col-md-6"><a href="' +
-						obj[key].newsLink+ '" target="_blank"><p class="one">'+
-						obj[key].title +'</p></a></div><div class="col-md-1"><i id="1" class="fa fa-thumbs-up like-btn"></i></div></div></div>';
+						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-4"><a href="' +
+						obj.key1[key].newsLink+ '" target="_blank"><img src="' +
+						obj.key1[key].img + '"></img></a></div><div class="col-md-5"><a href="' +
+						obj.key1[key].newsLink+ '" target="_blank"><p class="one">'+
+						obj.key1[key].title +'</p></a></div><div class="col-md-1"><i id="1" class="fa fa-thumbs-up like-btn"></i></div></div></div>';
 					}
 					else{
 						i++;
-						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-3"><a href="' +
-						obj[key].newsLink+ '" target="_blank"><img src="' +
-						obj[key].img + '"></img></a></div><div class="col-md-6"><a href="' +
-						obj[key].newsLink+ '" target="_blank"><p class="secondary">'+
-						obj[key].title +'</p></a></div><div class="col-md-1"><i id="'+
+						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-4"><a href="' +
+						obj.key1[key].newsLink+ '" target="_blank"><img src="' +
+						obj.key1[key].img + '"></img></a></div><div class="col-md-5"><a href="' +
+						obj.key1[key].newsLink+ '" target="_blank"><p class="secondary">'+
+						obj.key1[key].title +'</p></a></div><div class="col-md-1"><i id="'+
 						i+'" class="fa fa-thumbs-up like-btn"></i></div></div></div>';
 					}
 				});
 				$('#field').html(str);
+				
+				for (var j=0; j<obj.key2.length; j++){
+				
+					if(obj.key2[j]=="topic-tech"){
+						$("#topic-tech").css("color", "#fc0");
+						j=obj.key2.length;
+					}
+				}
+				
+				Object.getOwnPropertyNames(obj.key1).forEach(function(key) {
+					
+					for (var k=0; k<obj.key3.length; k++){
+					
+					if(obj.key1[key].title==obj.key3[k]){
+						$("#"+String(arr.indexOf(key)+1)).css("color", "#09f");
+						$("#"+String(arr.indexOf(key)+1)).hover(function(){
+						$(this).css("color", "#09f");
+						}, function(){
+						$(this).css("color", "#09f");
+					});
+						k=obj.key3.length;
+					}
+					else{
+					$("#"+String(arr.indexOf(key)+1)).hover(function(){
+					$(this).css("color", "#09f");
+					}, function(){
+					$(this).css("color", "#ddd");
+					});
+					}
+					}
+					
+				});
+				
 			}
 		});
 	});
@@ -198,28 +409,61 @@ $(document).ready(function(){
 			url: '/science',
 			type: 'GET',
 			success: function(obj){
-				newsObj=obj;
+				newsObj=obj.key1;
 				str = '<h2 class="text-center">Science\t<i id="topic-science" class="fa fa-star star-btn"></i></h2>';
 				i=1;
-				Object.getOwnPropertyNames(obj).forEach(function(key) {
+				Object.getOwnPropertyNames(obj.key1).forEach(function(key) {
 					if(key == "one"){
-						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-3"><a href="' +
-						obj[key].newsLink+ '" target="_blank"><img src="' +
-						obj[key].img + '"></img></a></div><div class="col-md-6"><a href="' +
-						obj[key].newsLink+ '" target="_blank"><p class="one">'+
-						obj[key].title +'</p></a></div><div class="col-md-1"><i id="1" class="fa fa-thumbs-up like-btn"></i></div></div></div>';
+						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-4"><a href="' +
+						obj.key1[key].newsLink+ '" target="_blank"><img src="' +
+						obj.key1[key].img + '"></img></a></div><div class="col-md-5"><a href="' +
+						obj.key1[key].newsLink+ '" target="_blank"><p class="one">'+
+						obj.key1[key].title +'</p></a></div><div class="col-md-1"><i id="1" class="fa fa-thumbs-up like-btn"></i></div></div></div>';
 					}
 					else{
 						i++;
-						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-3"><a href="' +
-						obj[key].newsLink+ '" target="_blank"><img src="' +
-						obj[key].img + '"></img></a></div><div class="col-md-6"><a href="' +
-						obj[key].newsLink+ '" target="_blank"><p class="secondary">'+
-						obj[key].title +'</p></a></div><div class="col-md-1"><i id="'+
+						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-4"><a href="' +
+						obj.key1[key].newsLink+ '" target="_blank"><img src="' +
+						obj.key1[key].img + '"></img></a></div><div class="col-md-5"><a href="' +
+						obj.key1[key].newsLink+ '" target="_blank"><p class="secondary">'+
+						obj.key1[key].title +'</p></a></div><div class="col-md-1"><i id="'+
 						i+'" class="fa fa-thumbs-up like-btn"></i></div></div></div>';
 					}
 				});
 				$('#field').html(str);
+				
+				for (var j=0; j<obj.key2.length; j++){
+				
+					if(obj.key2[j]=="topic-science"){
+						$("#topic-science").css("color", "#fc0");
+						j=obj.key2.length;
+					}
+				}
+				
+				Object.getOwnPropertyNames(obj.key1).forEach(function(key) {
+					
+					for (var k=0; k<obj.key3.length; k++){
+					
+					if(obj.key1[key].title==obj.key3[k]){
+						$("#"+String(arr.indexOf(key)+1)).css("color", "#09f");
+						$("#"+String(arr.indexOf(key)+1)).hover(function(){
+						$(this).css("color", "#09f");
+						}, function(){
+						$(this).css("color", "#09f");
+					});
+						k=obj.key3.length;
+					}
+					else{
+					$("#"+String(arr.indexOf(key)+1)).hover(function(){
+					$(this).css("color", "#09f");
+					}, function(){
+					$(this).css("color", "#ddd");
+					});
+					}
+					}
+					
+				});
+				
 			}
 		});
 	});
@@ -229,28 +473,61 @@ $(document).ready(function(){
 			url: '/popculture',
 			type: 'GET',
 			success: function(obj){
-				newsObj=obj;
+				newsObj=obj.key1;
 				str = '<h2 class="text-center">Pop-Culture\t<i id="topic-pop-culture" class="fa fa-star star-btn"></i></h2>';
 				i=1;
-				Object.getOwnPropertyNames(obj).forEach(function(key) {
+				Object.getOwnPropertyNames(obj.key1).forEach(function(key) {
 					if(key == "one"){
-						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-3"><a href="' +
-						obj[key].newsLink+ '" target="_blank"><img src="' +
-						obj[key].img + '"></img></a></div><div class="col-md-6"><a href="' +
-						obj[key].newsLink+ '" target="_blank"><p class="one">'+
-						obj[key].title +'</p></a></div><div class="col-md-1"><i id="1" class="fa fa-thumbs-up like-btn"></i></div></div></div>';
+						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-4"><a href="' +
+						obj.key1[key].newsLink+ '" target="_blank"><img src="' +
+						obj.key1[key].img + '"></img></a></div><div class="col-md-5"><a href="' +
+						obj.key1[key].newsLink+ '" target="_blank"><p class="one">'+
+						obj.key1[key].title +'</p></a></div><div class="col-md-1"><i id="1" class="fa fa-thumbs-up like-btn"></i></div></div></div>';
 					}
 					else{
 						i++;
-						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-3"><a href="' +
-						obj[key].newsLink+ '" target="_blank"><img src="' +
-						obj[key].img + '"></img></a></div><div class="col-md-6"><a href="' +
-						obj[key].newsLink+ '" target="_blank"><p class="secondary">'+
-						obj[key].title +'</p></a></div><div class="col-md-1"><i id="'+
+						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-4"><a href="' +
+						obj.key1[key].newsLink+ '" target="_blank"><img src="' +
+						obj.key1[key].img + '"></img></a></div><div class="col-md-5"><a href="' +
+						obj.key1[key].newsLink+ '" target="_blank"><p class="secondary">'+
+						obj.key1[key].title +'</p></a></div><div class="col-md-1"><i id="'+
 						i+'" class="fa fa-thumbs-up like-btn"></i></div></div></div>';
 					}
 				});
 				$('#field').html(str);
+				
+				for (var j=0; j<obj.key2.length; j++){
+				
+					if(obj.key2[j]=="topic-pop-culture"){
+						$("#topic-pop-culture").css("color", "#fc0");
+						j=obj.key2.length;
+					}
+				}
+				
+				Object.getOwnPropertyNames(obj.key1).forEach(function(key) {
+					
+					for (var k=0; k<obj.key3.length; k++){
+					
+					if(obj.key1[key].title==obj.key3[k]){
+						$("#"+String(arr.indexOf(key)+1)).css("color", "#09f");
+						$("#"+String(arr.indexOf(key)+1)).hover(function(){
+						$(this).css("color", "#09f");
+						}, function(){
+						$(this).css("color", "#09f");
+					});
+						k=obj.key3.length;
+					}
+					else{
+					$("#"+String(arr.indexOf(key)+1)).hover(function(){
+					$(this).css("color", "#09f");
+					}, function(){
+					$(this).css("color", "#ddd");
+					});
+					}
+					}
+					
+				});
+				
 			}
 		});
 	});
@@ -260,28 +537,61 @@ $(document).ready(function(){
 			url: '/lifestyle',
 			type: 'GET',
 			success: function(obj){
-				newsObj=obj;
+				newsObj=obj.key1;
 				str = '<h2 class="text-center">Lifestyle\t<i id="topic-lifestyle" class="fa fa-star star-btn"></i></h2>';
 				i=1;
-				Object.getOwnPropertyNames(obj).forEach(function(key) {
+				Object.getOwnPropertyNames(obj.key1).forEach(function(key) {
 					if(key == "one"){
-						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-3"><a href="' +
-						obj[key].newsLink+ '" target="_blank"><img src="' +
-						obj[key].img + '"></img></a></div><div class="col-md-6"><a href="' +
-						obj[key].newsLink+ '" target="_blank"><p class="one">'+
-						obj[key].title +'</p></a></div><div class="col-md-1"><i id="1" class="fa fa-thumbs-up like-btn"></i></div></div></div>';
+						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-4"><a href="' +
+						obj.key1[key].newsLink+ '" target="_blank"><img src="' +
+						obj.key1[key].img + '"></img></a></div><div class="col-md-5"><a href="' +
+						obj.key1[key].newsLink+ '" target="_blank"><p class="one">'+
+						obj.key1[key].title +'</p></a></div><div class="col-md-1"><i id="1" class="fa fa-thumbs-up like-btn"></i></div></div></div>';
 					}
 					else{
 						i++;
-						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-3"><a href="' +
-						obj[key].newsLink+ '" target="_blank"><img src="' +
-						obj[key].img + '"></img></a></div><div class="col-md-6"><a href="' +
-						obj[key].newsLink+ '" target="_blank"><p class="secondary">'+
-						obj[key].title +'</p></a></div><div class="col-md-1"><i id="'+
+						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-4"><a href="' +
+						obj.key1[key].newsLink+ '" target="_blank"><img src="' +
+						obj.key1[key].img + '"></img></a></div><div class="col-md-5"><a href="' +
+						obj.key1[key].newsLink+ '" target="_blank"><p class="secondary">'+
+						obj.key1[key].title +'</p></a></div><div class="col-md-1"><i id="'+
 						i+'" class="fa fa-thumbs-up like-btn"></i></div></div></div>';
 					}
 				});
 				$('#field').html(str);
+				
+				for (var j=0; j<obj.key2.length; j++){
+				
+					if(obj.key2[j]=="topic-lifestyle"){
+						$("#topic-lifestyle").css("color", "#fc0");
+						j=obj.key2.length;
+					}
+				}
+				
+				Object.getOwnPropertyNames(obj.key1).forEach(function(key) {
+					
+					for (var k=0; k<obj.key3.length; k++){
+					
+					if(obj.key1[key].title==obj.key3[k]){
+						$("#"+String(arr.indexOf(key)+1)).css("color", "#09f");
+						$("#"+String(arr.indexOf(key)+1)).hover(function(){
+						$(this).css("color", "#09f");
+						}, function(){
+						$(this).css("color", "#09f");
+					});
+						k=obj.key3.length;
+					}
+					else{
+					$("#"+String(arr.indexOf(key)+1)).hover(function(){
+					$(this).css("color", "#09f");
+					}, function(){
+					$(this).css("color", "#ddd");
+					});
+					}
+					}
+					
+				});
+				
 			}
 		});
 	});
@@ -291,28 +601,61 @@ $(document).ready(function(){
 			url: '/business',
 			type: 'GET',
 			success: function(obj){
-				newsObj=obj;
+				newsObj=obj.key1;
 				str = '<h2 class="text-center">Business\t<i id="topic-business" class="fa fa-star star-btn"></i></h2>';
 				i=1;
-				Object.getOwnPropertyNames(obj).forEach(function(key) {
+				Object.getOwnPropertyNames(obj.key1).forEach(function(key) {
 					if(key == "one"){
-						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-3"><a href="' +
-						obj[key].newsLink+ '" target="_blank"><img src="' +
-						obj[key].img + '"></img></a></div><div class="col-md-6"><a href="' +
-						obj[key].newsLink+ '" target="_blank"><p class="one">'+
-						obj[key].title +'</p></a></div><div class="col-md-1"><i id="1" class="fa fa-thumbs-up like-btn"></i></div></div></div>';
+						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-4"><a href="' +
+						obj.key1[key].newsLink+ '" target="_blank"><img src="' +
+						obj.key1[key].img + '"></img></a></div><div class="col-md-5"><a href="' +
+						obj.key1[key].newsLink+ '" target="_blank"><p class="one">'+
+						obj.key1[key].title +'</p></a></div><div class="col-md-1"><i id="1" class="fa fa-thumbs-up like-btn"></i></div></div></div>';
 					}
 					else{
 						i++;
-						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-3"><a href="' +
-						obj[key].newsLink+ '" target="_blank"><img src="' +
-						obj[key].img + '"></img></a></div><div class="col-md-6"><a href="' +
-						obj[key].newsLink+ '" target="_blank"><p class="secondary">'+
-						obj[key].title +'</p></a></div><div class="col-md-1"><i id="'+
+						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-4"><a href="' +
+						obj.key1[key].newsLink+ '" target="_blank"><img src="' +
+						obj.key1[key].img + '"></img></a></div><div class="col-md-5"><a href="' +
+						obj.key1[key].newsLink+ '" target="_blank"><p class="secondary">'+
+						obj.key1[key].title +'</p></a></div><div class="col-md-1"><i id="'+
 						i+'" class="fa fa-thumbs-up like-btn"></i></div></div></div>';
 					}
 				});
 				$('#field').html(str);
+				
+				for (var j=0; j<obj.key2.length; j++){
+				
+					if(obj.key2[j]=="topic-business"){
+						$("#topic-business").css("color", "#fc0");
+						j=obj.key2.length;
+					}
+				}
+				
+				Object.getOwnPropertyNames(obj.key1).forEach(function(key) {
+					
+					for (var k=0; k<obj.key3.length; k++){
+					
+					if(obj.key1[key].title==obj.key3[k]){
+						$("#"+String(arr.indexOf(key)+1)).css("color", "#09f");
+						$("#"+String(arr.indexOf(key)+1)).hover(function(){
+						$(this).css("color", "#09f");
+						}, function(){
+						$(this).css("color", "#09f");
+					});
+						k=obj.key3.length;
+					}
+					else{
+					$("#"+String(arr.indexOf(key)+1)).hover(function(){
+					$(this).css("color", "#09f");
+					}, function(){
+					$(this).css("color", "#ddd");
+					});
+					}
+					}
+					
+				});
+				
 			}
 		});
 	});
@@ -322,29 +665,62 @@ $(document).ready(function(){
 			url: '/us',
 			type: 'GET',
 			success: function(obj){
-				newsObj=obj;
+				newsObj=obj.key1;
 				str = '<h2 class="text-center">US-News\t<i id="topic-us" class="fa fa-star star-btn"></i></h2>';
 				i=1;
-				Object.getOwnPropertyNames(obj).forEach(function(key) {
+				Object.getOwnPropertyNames(obj.key1).forEach(function(key) {
 					if(key == "one"){
-						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-3"><a href="' +
-						obj[key].newsLink+ '" target="_blank"><img src="' +
-						obj[key].img + '"></img></a></div><div class="col-md-6"><a href="' +
-						obj[key].newsLink+ '" target="_blank"><p class="one">'
-						+ obj[key].title +'</p></a></div><div class="col-md-1"><i id="1" class="fa fa-thumbs-up like-btn"></i></div></div></div>';
+						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-4"><a href="' +
+						obj.key1[key].newsLink+ '" target="_blank"><img src="' +
+						obj.key1[key].img + '"></img></a></div><div class="col-md-5"><a href="' +
+						obj.key1[key].newsLink+ '" target="_blank"><p class="one">'+
+						obj.key1[key].title +'</p></a></div><div class="col-md-1"><i id="1" class="fa fa-thumbs-up like-btn"></i></div></div></div>';
 					}
 					else{
 						i++;
-						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-3"><a href="' +
-						obj[key].newsLink+ '" target="_blank"><img src="' +
-						obj[key].img + '"></img></a></div><div class="col-md-6"><a href="' +
-						obj[key].newsLink+ '" target="_blank"><p class="secondary">'+
-						obj[key].title +'</p></a></div><div class="col-md-1"><i id="'+
+						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-4"><a href="' +
+						obj.key1[key].newsLink+ '" target="_blank"><img src="' +
+						obj.key1[key].img + '"></img></a></div><div class="col-md-5"><a href="' +
+						obj.key1[key].newsLink+ '" target="_blank"><p class="secondary">'+
+						obj.key1[key].title +'</p></a></div><div class="col-md-1"><i id="'+
 						i+'" class="fa fa-thumbs-up like-btn"></i></div></div></div>';
 					}
 				});
 				
 				$('#field').html(str);
+				
+				for (var j=0; j<obj.key2.length; j++){
+				
+					if(obj.key2[j]=="topic-us"){
+						$("#topic-us").css("color", "#fc0");
+						j=obj.key2.length;
+					}
+				}
+				
+				Object.getOwnPropertyNames(obj.key1).forEach(function(key) {
+					
+					for (var k=0; k<obj.key3.length; k++){
+					
+					if(obj.key1[key].title==obj.key3[k]){
+						$("#"+String(arr.indexOf(key)+1)).css("color", "#09f");
+						$("#"+String(arr.indexOf(key)+1)).hover(function(){
+						$(this).css("color", "#09f");
+						}, function(){
+						$(this).css("color", "#09f");
+					});
+						k=obj.key3.length;
+					}
+					else{
+					$("#"+String(arr.indexOf(key)+1)).hover(function(){
+					$(this).css("color", "#09f");
+					}, function(){
+					$(this).css("color", "#ddd");
+					});
+					}
+					}
+					
+				});
+				
 		}
 	});
 
@@ -370,6 +746,7 @@ $(document).ready(function(){
 	});
 	
 		id = $(this).prop('id');
+		var number=id;
 		
 		if(id==1){
 			id="one";
@@ -425,22 +802,32 @@ $(document).ready(function(){
 					topic: id
 				},
 				success: function(topicData){
-					$(".star-btn").css("color","#ddd");
-					if(topicData!=""){
-						$("#"+id).css("color", "#fc0");
-					$(".star-btn").hover(function(){
+					
+					$("#"+id).css("color", "#ddd");
+					
+					for (var j=0; j<topicData.length; j++){
+					
+					if(topicData[j]==id){
+						
+					$("#"+id).css("color", "#fc0");
+					
+					$("#"+id).hover(function(){
 					$(this).css("color", "#fc0");
 					}, function(){
 					$(this).css("color", "#fc0");
 					});
+					
+						j=topicData.length;
 						console.log("favourite topic");
 					}
 					else{
-					$(".star-btn").hover(function(){
+						$("#"+id).css("color", "#ddd");
+					$("#"+id).hover(function(){
 					$(this).css("color", "#fc0");
 					}, function(){
 					$(this).css("color", "#ddd");
 					});
+					}	
 					}
 				}
 			});
@@ -457,17 +844,33 @@ $(document).ready(function(){
 				title: newsObj[id].title
 			},
 			success: function(likes){
-				$(".like-btn").css("color", "#ddd");
-				for (var j=1; j<=likes.length; j++){
-					Object.getOwnPropertyNames(newsObj).forEach(function(key) {
-						
-						if(newsObj[key].title==likes[j]){
-							$("#"+String(j)).css("color", "#09f");
-							console.log(likes[j]);
-						}
-						
-					});
+				
+				$("#"+number).css("color", "#ddd");
+				
+				Object.getOwnPropertyNames(newsObj).forEach(function(key) {
+					
+				for (var k=0; k<likes.length; k++){
+					
+					if(newsObj[key].title==likes[k]){
+						$("#"+String(arr.indexOf(key)+1)).css("color", "#09f");
+						console.log("success!!!");
+						$("#"+String(arr.indexOf(key)+1)).hover(function(){
+						$(this).css("color", "#09f");
+						}, function(){
+						$(this).css("color", "#09f");
+						});
+						k=likes.length;
+					}
+					else{
+						$("#"+String(arr.indexOf(key)+1)).hover(function(){
+						$(this).css("color", "#09f");
+						}, function(){
+						$(this).css("color", "#ddd");
+						});
+					}
 				}
+					
+				});
 			}
 		});
 		

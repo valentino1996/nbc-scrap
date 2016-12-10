@@ -25,6 +25,7 @@ var userObj='';
 var token = '2538355556-GeEuOWBlO2wo7vi6zHq9nEOrfdGRIkZQT1wcW1P';
 var tokenSecret = 'fuSWRwwzBRVSQrskxEwSHIZoFBc0PJUydlkz94rLDyA9T';
 var idName ="";
+var sendObj={};
 var obj = {
 	
 
@@ -107,7 +108,7 @@ mongoose.connection.once("open", function(err){
 		
 		var schema = mongoose.Schema({
 			username: {type: String, unique:true},
-			favourite: {type: String},
+			favourite: {type: Array},
 			likes: {type: Array},
 			fullNews: {type: Array}
 		});
@@ -154,11 +155,22 @@ mongoose.connection.once("open", function(err){
 	));
 	
 	app.post("/", function(req, res){
-		//userObj = req.body.a;
-		//console.log(userObj);
-		//res.send(userObj);
 		
 	});
+	
+	app.get('/liked', function(req, res){
+	
+	Db.findOne({username: userObj.username}, function(err, snippet){
+	
+		if(err || !snippet){
+			console.log(err);
+			return;
+		}
+		console.log(snippet.fulNews);
+		res.json(snippet.fullNews);
+	});
+	
+});
 	
 	app.post("/favourite", function(req, res){
 		
@@ -171,26 +183,29 @@ mongoose.connection.once("open", function(err){
 				return;
 			}
 			
-			if(snippet.favourite==favourite){
-				favourite="";
-				console.log(favourite);
+			var arr = snippet.favourite;
+			if(arr.indexOf(favourite)==-1){
+				arr.push(favourite);
+			}
+			else{
+				arr.splice(snippet.favourite.indexOf(favourite),1);
 			}
 			
-			Db.findOneAndUpdate({username:userObj.username}, {favourite:favourite}, function(err, updatedSnippet){
+			Db.findOneAndUpdate({username:userObj.username}, {favourite:arr}, function(err, updatedSnippet){
 				
 				if(err||!updatedSnippet){
 					console.log(err);
 					return;
 				}
 				
-				res.json(updatedSnippet.favourite);
+					res.json(arr);
 				
 			});
 			
 		});
 		
 	});
-	//shif kodin posht ksaj
+	
 	app.post("/likes", function(req, res){
 		
 		var article = req.body.title;
@@ -222,7 +237,7 @@ mongoose.connection.once("open", function(err){
 					return;
 				}
 				
-				res.json(updatedSnippet.likes);
+					res.json(arr);
 				
 			});
 			
@@ -230,35 +245,82 @@ mongoose.connection.once("open", function(err){
 		
 	});
 	
-app.post("/twitter", function(req, res){
+	app.post("/twitter", function(req, res){
 	
 	if(userObj==''){
 		res.json({a:1});
 		return;
 	}
-	res.json(userObj);
 	
-});
-
-app.get("/health", function(req, res){
-	
-	idName="#health-section";
-	
-	x('http://www.nbcnews.com/health', obj)(function(err, code) {
+	Db.findOne({username:userObj.username}, function(err, snippet){
 		
-		res.json(code);
+		if(err||!snippet){
+			console.log(err);
+			return;
+		}
+	
+		res.json({key1:userObj,key2:snippet.favourite});
+	
 	});
 	
 });
 
-app.get("/world", function(req, res){
+	app.get("/health", function(req, res){
+	
+		idName="#health-section";
+	
+	Db.findOne({username:userObj.username}, function(err, snippet){
+
+		x('http://www.nbcnews.com/health', obj)(function(err, code) {
+			
+			if(err||!snippet){
+				console.log(err);
+				sendObj = {	key1: code,
+							key2:0,
+							key3:0};
+			}
+			
+			else{
+		
+				sendObj = {	key1: code,
+							key2:snippet.favourite,
+							key3:snippet.likes};
+			}
+					
+			res.json(sendObj);
+		
+	});
+		
+	});
+	
+});
+
+	app.get("/world", function(req, res){
 	
 	idName="#world-section";
 	
-	x('http://www.nbcnews.com/news/world', obj)(function(err, code) {
+	Db.findOne({username:userObj.username}, function(err, snippet){
+
+		x('http://www.nbcnews.com/news/world', obj)(function(err, code) {
+			
+			if(err||!snippet){
+				console.log(err);
+				sendObj = {	key1: code,
+							key2:0,
+							key3:0};
+			}
+			
+			else{
 		
-		res.json(code);
-		console.log(code);
+				sendObj = {	key1: code,
+							key2:snippet.favourite,
+							key3:snippet.likes};
+			}
+					
+			res.json(sendObj);
+		
+	});
+		
 	});
 	
 });
@@ -267,9 +329,28 @@ app.get("/politics", function(req, res){
 	
 	idName="#politics-section";
 	
-	x('http://www.nbcnews.com/politics', obj)(function(err, code) {
+	Db.findOne({username:userObj.username}, function(err, snippet){
+
+		x('http://www.nbcnews.com/politics', obj)(function(err, code) {
+			
+			if(err||!snippet){
+				console.log(err);
+				sendObj = {	key1: code,
+							key2:0,
+							key3:0};
+			}
+			
+			else{
 		
-		res.json(code);
+				sendObj = {	key1: code,
+							key2:snippet.favourite,
+							key3:snippet.likes};
+			}
+					
+			res.json(sendObj);
+		
+	});
+		
 	});
 	
 });
@@ -278,9 +359,28 @@ app.get("/invest", function(req, res){
 	
 	idName="#investigations-section";
 	
-	x('http://www.nbcnews.com/news/investigations', obj)(function(err, code) {
+	Db.findOne({username:userObj.username}, function(err, snippet){
+
+		x('http://www.nbcnews.com/news/investigations', obj)(function(err, code) {
+			
+			if(err||!snippet){
+				console.log(err);
+				sendObj = {	key1: code,
+							key2:0,
+							key3:0};
+			}
+			
+			else{
 		
-		res.json(code);
+				sendObj = {	key1: code,
+							key2:snippet.favourite,
+							key3:snippet.likes};
+			}
+					
+			res.json(sendObj);
+		
+	});
+		
 	});
 	
 });
@@ -289,59 +389,197 @@ app.get("/tech", function(req, res){
 	
 	idName="#tech-section";
 	
-	x('http://www.nbcnews.com/tech', obj)(function(err, code) {
+	Db.findOne({username:userObj.username}, function(err, snippet){
+
+		x('http://www.nbcnews.com/tech', obj)(function(err, code) {
+			
+			if(err||!snippet){
+				console.log(err);
+				sendObj = {	key1: code,
+							key2:0,
+							key3:0};
+			}
+			
+			else{
 		
-		res.json(code);
+				sendObj = {	key1: code,
+							key2:snippet.favourite,
+							key3:snippet.likes};
+			}
+					
+			res.json(sendObj);
+		
 	});
+		
+	});
+	
 });
 
 app.get("/science", function(req, res){
 	
 	idName ="#science-section";
 	
-	x('http://www.nbcnews.com/science', obj)(function(err, code) {
+	Db.findOne({username:userObj.username}, function(err, snippet){
+
+		x('http://www.nbcnews.com/science', obj)(function(err, code) {
+			
+			if(err||!snippet){
+				console.log(err);
+				sendObj = {	key1: code,
+							key2:0,
+							key3:0};
+			}
+			
+			else{
 		
-		res.json(code);
+				sendObj = {	key1: code,
+							key2:snippet.favourite,
+							key3:snippet.likes};
+			}
+					
+			res.json(sendObj);
+		
 	});
+		
+	});
+	
 });
 
 app.get("/popculture", function(req, res){
 	
 	idName ="#pop-culture-section";
 	
-	x('http://www.nbcnews.com/pop-culture', obj)(function(err, code) {
+	Db.findOne({username:userObj.username}, function(err, snippet){
+
+		x('http://www.nbcnews.com/pop-culture', obj)(function(err, code) {
+			
+			if(err||!snippet){
+				console.log(err);
+				sendObj = {	key1: code,
+							key2:0,
+							key3:0};
+			}
+			
+			else{
 		
-		res.json(code);
+				sendObj = {	key1: code,
+							key2:snippet.favourite,
+							key3:snippet.likes};
+			}
+					
+			res.json(sendObj);
+		
 	});
+		
+	});
+	
 });
 
 app.get("/lifestyle", function(req, res){
 	
 	idName ="#lifestyle-section";
 	
-	x('http://www.nbcnews.com/pop-culture/lifestyle', obj)(function(err, code) {
+	Db.findOne({username:userObj.username}, function(err, snippet){
+
+		x('http://www.nbcnews.com/pop-culture/lifestyle', obj)(function(err, code) {
+			
+			if(err||!snippet){
+				console.log(err);
+				sendObj = {	key1: code,
+							key2:0,
+							key3:0};
+			}
+			
+			else{
 		
-		res.json(code);
+				sendObj = {	key1: code,
+							key2:snippet.favourite,
+							key3:snippet.likes};
+			}
+					
+			res.json(sendObj);
+		
 	});
+		
+	});
+	
 });
 
 app.get("/business", function(req, res){
 	
 	idName ="#business-section";
 	
-	x('http://www.nbcnews.com/business', obj)(function(err, code) {
+	Db.findOne({username:userObj.username}, function(err, snippet){
+
+		x('http://www.nbcnews.com/business', obj)(function(err, code) {
+			
+			if(err||!snippet){
+				console.log(err);
+				sendObj = {	key1: code,
+							key2:0,
+							key3:0};
+			}
+			
+			else{
 		
-		res.json(code);
+				sendObj = {	key1: code,
+							key2:snippet.favourite,
+							key3:snippet.likes};
+			}
+					
+			res.json(sendObj);
+		
 	});
+		
+	});
+	
 });
 
 app.get("/us", function(req, res){
 	
 	idName ="#us-news-section";
 	
-	x('http://www.nbcnews.com/news/us-news', obj)(function(err, code) {
+	Db.findOne({username:userObj.username}, function(err, snippet){
+
+		x('http://www.nbcnews.com/news/us-news', obj)(function(err, code) {
+			
+			if(err||!snippet){
+				console.log(err);
+				sendObj = {	key1: code,
+							key2:0,
+							key3:0};
+			}
+			
+			else{
 		
-		res.json(code);
+				sendObj = {	key1: code,
+							key2:snippet.favourite,
+							key3:snippet.likes};
+			}
+					
+			res.json(sendObj);
+		
+	});
+		
+	});
+	
+});
+
+app.post("/deactivate", function(req, res){
+	Db.findOneAndRemove({username:userObj.username}, function(err, snippet){
+		
+		if(err||!snippet){
+			console.log(err);
+			return;
+		}
+		
+		user="";
+		userObj='';
+		idName ="";
+		sendObj={};
+		
+		res.json({a:1});
+		
 	});
 });
 
@@ -358,4 +596,5 @@ app.get("/us", function(req, res){
 	
 
 });
+
 app.listen(process.env.PORT||8080);
