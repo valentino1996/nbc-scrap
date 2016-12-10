@@ -108,7 +108,8 @@ mongoose.connection.once("open", function(err){
 		var schema = mongoose.Schema({
 			username: {type: String, unique:true},
 			favourite: {type: String},
-			likes: {type: Array}
+			likes: {type: Array},
+			fullNews: {type: Array}
 		});
 		
 		var Db = mongoose.model("NBC User", schema);
@@ -118,7 +119,7 @@ mongoose.connection.once("open", function(err){
 	passport.use(new TwitterStrategy({
 		consumerKey: '7yqe1MKJmAHBBV97lro32cZi9',
 		consumerSecret: 'F573BNj9Daj1ohAjnT2Q79EUPwXv0c14r2gbsQbuX23Ct6iL4E',
-		callbackURL: "http://127.0.0.1:8080/auth/twitter/callback"
+		callbackURL: "http://nbc-news-scrap.herokuapp.com/auth/twitter/callback"
 	},
 	function(token, tokenSecret, profile, done) {
 		
@@ -129,7 +130,7 @@ mongoose.connection.once("open", function(err){
 				photo: profile.photos[0].value
 			};
 			
-			Db.create({username: userObj.username, favourite:"", likes:[]}, function(err, snippet){
+			Db.create({username: userObj.username, favourite:"", likes:[], fullNews:[]}, function(err, snippet){
 				
 				if(err||!snippet){
 					console.log(err);
@@ -175,22 +176,57 @@ mongoose.connection.once("open", function(err){
 				console.log(favourite);
 			}
 			
-			Db.findOneAndUpdate({username:userObj.username}, {favourite:favourite}, function(err, snippet){
+			Db.findOneAndUpdate({username:userObj.username}, {favourite:favourite}, function(err, updatedSnippet){
 				
-				if(err||!snippet){
+				if(err||!updatedSnippet){
 					console.log(err);
 					return;
 				}
 				
-				res.json(snippet.favourite);
+				res.json(updatedSnippet.favourite);
 				
 			});
 			
 		});
 		
 	});
-	
+	//shif kodin posht ksaj
 	app.post("/likes", function(req, res){
+		
+		var article = req.body.title;
+		var fullNews = {newsLink:req.body.newsLink, img:req.body.img, title:req.body.title};
+		console.log(article);
+		
+		Db.findOne({username:userObj.username}, function(err, snippet){
+			
+			if(err||!snippet){
+				console.log(err);
+				return;
+			}
+			
+			var arr=snippet.likes;
+			var index = arr.indexOf(article);
+			if(index==-1){
+				arr.push(article);
+				snippet.fullNews.push(fullNews);
+			}
+			else{
+				arr.splice(index,1);
+				snippet.fullNews.splice(index,1);
+			}
+			
+			Db.findOneAndUpdate({username:userObj.username}, {likes:arr, fullNews:snippet.fullNews}, function(err, updatedSnippet){
+				
+				if(err||!updatedSnippet){
+					console.log(err);
+					return;
+				}
+				
+				res.json(updatedSnippet.likes);
+				
+			});
+			
+		});
 		
 	});
 	

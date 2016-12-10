@@ -20,7 +20,7 @@ $(document).ready(function(){
 			success: function(obj){
 				
 				if(obj.a==1){
-					window.location="http://127.0.0.1:8080/auth/twitter";
+					window.location="http://nbc-news-scrap.herokuapp.com/auth/twitter";
 				}
 				else{
 					userObj== obj;
@@ -358,7 +358,7 @@ $(document).ready(function(){
 		success: function(obj){
 		
 			if(obj.a==1){
-				window.location="http://127.0.0.1:8080/auth/twitter";
+				window.location="http://nbc-news-scrap.herokuapp.com/auth/twitter";
 			}
 			else{
 				userObj== obj;
@@ -428,7 +428,19 @@ $(document).ready(function(){
 					$(".star-btn").css("color","#ddd");
 					if(topicData!=""){
 						$("#"+id).css("color", "#fc0");
+					$(".star-btn").hover(function(){
+					$(this).css("color", "#fc0");
+					}, function(){
+					$(this).css("color", "#fc0");
+					});
 						console.log("favourite topic");
+					}
+					else{
+					$(".star-btn").hover(function(){
+					$(this).css("color", "#fc0");
+					}, function(){
+					$(this).css("color", "#ddd");
+					});
 					}
 				}
 			});
@@ -436,7 +448,28 @@ $(document).ready(function(){
 			return;
 		}
 		
-		
+		$.ajax({
+			url:"/likes",
+			type:"POST",
+			data:{
+				newsLink: newsObj[id].newsLink,
+				img: newsObj[id].img,
+				title: newsObj[id].title
+			},
+			success: function(likes){
+				$(".like-btn").css("color", "#ddd");
+				for (var j=1; j<=likes.length; j++){
+					Object.getOwnPropertyNames(newsObj).forEach(function(key) {
+						
+						if(newsObj[key].title==likes[j]){
+							$("#"+String(j)).css("color", "#09f");
+							console.log(likes[j]);
+						}
+						
+					});
+				}
+			}
+		});
 		
 	});
 	
