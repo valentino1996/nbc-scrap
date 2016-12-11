@@ -123,7 +123,7 @@ a{
 }
 
 #deactivate{
-	margin-top: 50px;
+	margin-top: 20px;
 	margin-left: 0 !important;
 }
 
@@ -148,4 +148,25 @@ a{
 
 .fa-times:hover{
 	color: red !important;
+}
+
+.remove-articles{
+	color: #333 !important;
+}
+
+.remove-articles:hover{
+	color: red !important;
+}
+#clear{
+	margin-top: 10px;
+}
+
+#clear:hover{
+	background-color:red !important;
+	color: black !important;
+}
+
+#schedule{
+		margin-top: 50px;
+		margin-left: 0 !important;
 }

@@ -5,7 +5,9 @@ var newsObj;
 var arr = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
 var favString="";
 var likedArray=[];
+var favouriteArray=[];
 //http://nbc-news-scrap.herokuapp.com
+
 $(document).ready(function(){
 	
 	$('#profile-page').hide();
@@ -40,7 +42,7 @@ $(document).ready(function(){
 				str ='<h2 class="text-center">Liked Articles</h2>';
 				for(var j = 0; j < array.length; j++){
 					
-				 	str += '<div class="liked-news"><div class="row"><div class="col-md-1"></div><div class="col-md-4"><a href="' +
+				 	str += '<div class="news liked-news"><div class="row"><div class="col-md-5"><a href="' +
 						array[j].newsLink+ '" target="_blank"><img src="' +
 						array[j].img + '"></img></a></div><div class="col-md-5"><a href="' +
 						array[j].newsLink+ '" target="_blank"><p class="one">'+
@@ -53,6 +55,23 @@ $(document).ready(function(){
 				}
 			});
 		});
+		
+	$("#schedule").on("click", function(){
+		console.log("button pressed");
+		$.ajax({
+			url: "/schedule",
+			type: "POST",
+			data: {
+				
+			},
+			success: function(){
+				$("#x").trigger("click");
+				$("#world").trigger("click");
+				$("#schedule").trigger("click");
+			}
+		});
+		
+	});
 	
 	$('#twitter').on('click', function(){
 		
@@ -72,10 +91,14 @@ $(document).ready(function(){
 					$("#display-name").html(obj.key1.displayName);
 					$("#profile-image").prop("src", obj.key1.photo);
 					
+					favouriteArray=obj.key2;
+					
 					favString="<h5>Favourite Topics :</h5>";
 					
 					for(var j=0; j<obj.key2.length; j++){
-						favString += '<h6>'+obj.key2[j]+'</h6>';
+						favString += 	'<div class="row"><div class="col-md-5"><h6>'+
+										obj.key2[j]+'</h6></div>'+
+										'<div class="col-md-3"><p id="'+j+'" class="remove-articles">x</p></div></div>';
 					}
 					$("#fav-text").html(favString);
 					$('#profile-page').show();
@@ -87,17 +110,43 @@ $(document).ready(function(){
 		
 	});
 	
+	$("#fav-text").on("click", ".remove-articles", function(){
+		
+		id = Number($(this).prop("id"));
+		console.log(id);
+		
+		$.ajax({
+			url: "/remove",
+			type: "POST",
+			data: {
+				removed: id
+			},
+			success: function(obj){
+				$("#twitter").trigger("click");
+			}
+		});
+		
+	});
+	
+	
+	
 	$('#world').on('click', function(){
 		$.ajax({
 			url: '/world',
 			type: 'GET',
 			success: function(obj){
 				newsObj=obj.key1;
-				str = '<h2 class="text-center">World\t<i id="topic-world" class="fa fa-star star-btn"></i></h2>';
+				str ='<h2 class="text-center">World\t<i id="topic-world" class="fa fa-star star-btn"></i></h2>';
 				i=1;
 				Object.getOwnPropertyNames(obj.key1).forEach(function(key) {
+					
+					if(typeof obj.key1[key].title=="undefined"){
+						obj.key1[key].img = "http://i68.tinypic.com/2i9i0l5.jpg";
+						obj.key1[key].title = "Click here to read this article";
+					}
+					
 					if(key == "one"){
-						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-4"><a href="' +
+						str += '<div class="news"><div class="row"><div class="col-md-5"><a href="' +
 						obj.key1[key].newsLink+ '" target="_blank"><img src="' +
 						obj.key1[key].img + '"></img></a></div><div class="col-md-5"><a href="' +
 						obj.key1[key].newsLink+ '" target="_blank"><p class="one">'+
@@ -105,7 +154,7 @@ $(document).ready(function(){
 					}
 					else{
 						i++;
-						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-4"><a href="' +
+						str += '<div class="news"><div class="row"><div class="col-md-5"><a href="' +
 						obj.key1[key].newsLink+ '" target="_blank"><img src="' +
 						obj.key1[key].img + '"></img></a></div><div class="col-md-5"><a href="' +
 						obj.key1[key].newsLink+ '" target="_blank"><p class="secondary">'+
@@ -160,8 +209,14 @@ $(document).ready(function(){
 				str = '<h2 class="text-center">Politics\t<i id="topic-politics" class="fa fa-star star-btn"></i></h2>';
 				i=1;
 				Object.getOwnPropertyNames(obj.key1).forEach(function(key) {
+					
+					if(typeof obj.key1[key].title=="undefined"){
+						obj.key1[key].img = "http://i68.tinypic.com/2i9i0l5.jpg";
+						obj.key1[key].title = "Click here to read this article";
+					}
+					
 					if(key == "one"){
-						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-4"><a href="' +
+						str += '<div class="news"><div class="row"><div class="col-md-5"><a href="' +
 						obj.key1[key].newsLink+ '" target="_blank"><img src="' +
 						obj.key1[key].img + '"></img></a></div><div class="col-md-5"><a href="' +
 						obj.key1[key].newsLink+ '" target="_blank"><p class="one"">'+
@@ -169,7 +224,7 @@ $(document).ready(function(){
 					}
 					else{
 						i++;
-						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-4"><a href="' +
+						str += '<div class="news"><div class="row"><div class="col-md-5"><a href="' +
 						obj.key1[key].newsLink+ '" target="_blank"><img src="' +
 						obj.key1[key].img + '"></img></a></div><div class="col-md-5"><a href="' +
 						obj.key1[key].newsLink+ '" target="_blank"><p class="secondary">'+
@@ -224,8 +279,14 @@ $(document).ready(function(){
 				str = '<h2 class="text-center">Investigations\t<i id="topic-investigation" class="fa fa-star star-btn"></i></h2>';
 				i=1;
 				Object.getOwnPropertyNames(obj.key1).forEach(function(key) {
+					
+					if(typeof obj.key1[key].title=="undefined"){
+						obj.key1[key].img = "http://i68.tinypic.com/2i9i0l5.jpg";
+						obj.key1[key].title = "Click here to read this article";
+					}
+					
 					if(key == "one"){
-						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-4"><a href="' +
+						str += '<div class="news"><div class="row"><div class="col-md-5"><a href="' +
 						obj.key1[key].newsLink+ '" target="_blank"><img src="' +
 						obj.key1[key].img + '"></img></a></div><div class="col-md-5"><a href="' +
 						obj.key1[key].newsLink+ '" target="_blank"><p class="one">'+
@@ -233,7 +294,7 @@ $(document).ready(function(){
 					}
 					else{
 						i++;
-						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-4"><a href="' +
+						str += '<div class="news"><div class="row"><div class="col-md-5"><a href="' +
 						obj.key1[key].newsLink+ '" target="_blank"><img src="' +
 						obj.key1[key].img + '"></img></a></div><div class="col-md-5"><a href="' +
 						obj.key1[key].newsLink+ '" target="_blank"><p class="secondary">'+
@@ -288,8 +349,14 @@ $(document).ready(function(){
 				str = '<h2 class="text-center">Health\t<i id="topic-health" class="fa fa-star star-btn"></i></h2>';
 				i=1;
 				Object.getOwnPropertyNames(obj.key1).forEach(function(key) {
+					
+					if(typeof obj.key1[key].title=="undefined"){
+						obj.key1[key].img = "http://i68.tinypic.com/2i9i0l5.jpg";
+						obj.key1[key].title = "Click here to read this article";
+					}
+					
 					if(key == "one"){
-						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-4"><a href="' +
+						str += '<div class="news"><div class="row"><div class="col-md-5"><a href="' +
 						obj.key1[key].newsLink+ '" target="_blank"><img src="' +
 						obj.key1[key].img + '"></img></a></div><div class="col-md-5"><a href="' +
 						obj.key1[key].newsLink+ '" target="_blank"><p class="one">'+
@@ -297,7 +364,7 @@ $(document).ready(function(){
 					}
 					else{
 						i++;
-						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-4"><a href="' +
+						str += '<div class="news"><div class="row"><div class="col-md-5"><a href="' +
 						obj.key1[key].newsLink+ '" target="_blank"><img src="' +
 						obj.key1[key].img + '"></img></a></div><div class="col-md-5"><a href="' +
 						obj.key1[key].newsLink+ '" target="_blank"><p class="secondary">'+
@@ -352,8 +419,14 @@ $(document).ready(function(){
 				str = '<h2 class="text-center">Tech\t<i id="topic-tech" class="fa fa-star star-btn"></i></h2>';
 				i=1;
 				Object.getOwnPropertyNames(obj.key1).forEach(function(key) {
+					
+					if(typeof obj.key1[key].title=="undefined"){
+						obj.key1[key].img = "http://i68.tinypic.com/2i9i0l5.jpg";
+						obj.key1[key].title = "Click here to read this article";
+					}
+					
 					if(key == "one"){
-						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-4"><a href="' +
+						str += '<div class="news"><div class="row"><div class="col-md-5"><a href="' +
 						obj.key1[key].newsLink+ '" target="_blank"><img src="' +
 						obj.key1[key].img + '"></img></a></div><div class="col-md-5"><a href="' +
 						obj.key1[key].newsLink+ '" target="_blank"><p class="one">'+
@@ -361,7 +434,7 @@ $(document).ready(function(){
 					}
 					else{
 						i++;
-						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-4"><a href="' +
+						str += '<div class="news"><div class="row"><div class="col-md-5"><a href="' +
 						obj.key1[key].newsLink+ '" target="_blank"><img src="' +
 						obj.key1[key].img + '"></img></a></div><div class="col-md-5"><a href="' +
 						obj.key1[key].newsLink+ '" target="_blank"><p class="secondary">'+
@@ -416,8 +489,14 @@ $(document).ready(function(){
 				str = '<h2 class="text-center">Science\t<i id="topic-science" class="fa fa-star star-btn"></i></h2>';
 				i=1;
 				Object.getOwnPropertyNames(obj.key1).forEach(function(key) {
+					
+					if(typeof obj.key1[key].title=="undefined"){
+						obj.key1[key].img = "http://i68.tinypic.com/2i9i0l5.jpg";
+						obj.key1[key].title = "Click here to read this article";
+					}
+					
 					if(key == "one"){
-						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-4"><a href="' +
+						str += '<div class="news"><div class="row"><div class="col-md-5"><a href="' +
 						obj.key1[key].newsLink+ '" target="_blank"><img src="' +
 						obj.key1[key].img + '"></img></a></div><div class="col-md-5"><a href="' +
 						obj.key1[key].newsLink+ '" target="_blank"><p class="one">'+
@@ -425,7 +504,7 @@ $(document).ready(function(){
 					}
 					else{
 						i++;
-						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-4"><a href="' +
+						str += '<div class="news"><div class="row"><div class="col-md-5"><a href="' +
 						obj.key1[key].newsLink+ '" target="_blank"><img src="' +
 						obj.key1[key].img + '"></img></a></div><div class="col-md-5"><a href="' +
 						obj.key1[key].newsLink+ '" target="_blank"><p class="secondary">'+
@@ -480,8 +559,14 @@ $(document).ready(function(){
 				str = '<h2 class="text-center">Pop-Culture\t<i id="topic-pop-culture" class="fa fa-star star-btn"></i></h2>';
 				i=1;
 				Object.getOwnPropertyNames(obj.key1).forEach(function(key) {
+					
+					if(typeof obj.key1[key].title=="undefined"){
+						obj.key1[key].img = "http://i68.tinypic.com/2i9i0l5.jpg";
+						obj.key1[key].title = "Click here to read this article";
+					}
+					
 					if(key == "one"){
-						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-4"><a href="' +
+						str += '<div class="news"><div class="row"><div class="col-md-5"><a href="' +
 						obj.key1[key].newsLink+ '" target="_blank"><img src="' +
 						obj.key1[key].img + '"></img></a></div><div class="col-md-5"><a href="' +
 						obj.key1[key].newsLink+ '" target="_blank"><p class="one">'+
@@ -489,7 +574,7 @@ $(document).ready(function(){
 					}
 					else{
 						i++;
-						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-4"><a href="' +
+						str += '<div class="news"><div class="row"><div class="col-md-5"><a href="' +
 						obj.key1[key].newsLink+ '" target="_blank"><img src="' +
 						obj.key1[key].img + '"></img></a></div><div class="col-md-5"><a href="' +
 						obj.key1[key].newsLink+ '" target="_blank"><p class="secondary">'+
@@ -544,8 +629,14 @@ $(document).ready(function(){
 				str = '<h2 class="text-center">Lifestyle\t<i id="topic-lifestyle" class="fa fa-star star-btn"></i></h2>';
 				i=1;
 				Object.getOwnPropertyNames(obj.key1).forEach(function(key) {
+					
+					if(typeof obj.key1[key].title=="undefined"){
+						obj.key1[key].img = "http://i68.tinypic.com/2i9i0l5.jpg";
+						obj.key1[key].title = "Click here to read this article";
+					}
+					
 					if(key == "one"){
-						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-4"><a href="' +
+						str += '<div class="news"><div class="row"><div class="col-md-5"><a href="' +
 						obj.key1[key].newsLink+ '" target="_blank"><img src="' +
 						obj.key1[key].img + '"></img></a></div><div class="col-md-5"><a href="' +
 						obj.key1[key].newsLink+ '" target="_blank"><p class="one">'+
@@ -553,7 +644,7 @@ $(document).ready(function(){
 					}
 					else{
 						i++;
-						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-4"><a href="' +
+						str += '<div class="news"><div class="row"><div class="col-md-5"><a href="' +
 						obj.key1[key].newsLink+ '" target="_blank"><img src="' +
 						obj.key1[key].img + '"></img></a></div><div class="col-md-5"><a href="' +
 						obj.key1[key].newsLink+ '" target="_blank"><p class="secondary">'+
@@ -608,8 +699,14 @@ $(document).ready(function(){
 				str = '<h2 class="text-center">Business\t<i id="topic-business" class="fa fa-star star-btn"></i></h2>';
 				i=1;
 				Object.getOwnPropertyNames(obj.key1).forEach(function(key) {
+					
+					if(typeof obj.key1[key].title=="undefined"){
+						obj.key1[key].img = "http://i68.tinypic.com/2i9i0l5.jpg";
+						obj.key1[key].title = "Click here to read this article";
+					}
+					
 					if(key == "one"){
-						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-4"><a href="' +
+						str += '<div class="news"><div class="row"><div class="col-md-5"><a href="' +
 						obj.key1[key].newsLink+ '" target="_blank"><img src="' +
 						obj.key1[key].img + '"></img></a></div><div class="col-md-5"><a href="' +
 						obj.key1[key].newsLink+ '" target="_blank"><p class="one">'+
@@ -617,7 +714,7 @@ $(document).ready(function(){
 					}
 					else{
 						i++;
-						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-4"><a href="' +
+						str += '<div class="news"><div class="row"><div class="col-md-5"><a href="' +
 						obj.key1[key].newsLink+ '" target="_blank"><img src="' +
 						obj.key1[key].img + '"></img></a></div><div class="col-md-5"><a href="' +
 						obj.key1[key].newsLink+ '" target="_blank"><p class="secondary">'+
@@ -672,8 +769,14 @@ $(document).ready(function(){
 				str = '<h2 class="text-center">US-News\t<i id="topic-us" class="fa fa-star star-btn"></i></h2>';
 				i=1;
 				Object.getOwnPropertyNames(obj.key1).forEach(function(key) {
+					
+					if(typeof obj.key1[key].title=="undefined"){
+						obj.key1[key].img = "http://i68.tinypic.com/2i9i0l5.jpg";
+						obj.key1[key].title = "Click here to read this article";
+					}
+					
 					if(key == "one"){
-						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-4"><a href="' +
+						str += '<div class="news"><div class="row"><div class="col-md-5"><a href="' +
 						obj.key1[key].newsLink+ '" target="_blank"><img src="' +
 						obj.key1[key].img + '"></img></a></div><div class="col-md-5"><a href="' +
 						obj.key1[key].newsLink+ '" target="_blank"><p class="one">'+
@@ -681,7 +784,7 @@ $(document).ready(function(){
 					}
 					else{
 						i++;
-						str += '<div class="news"><div class="row"><div class="col-md-1"></div><div class="col-md-4"><a href="' +
+						str += '<div class="news"><div class="row"><div class="col-md-5"><a href="' +
 						obj.key1[key].newsLink+ '" target="_blank"><img src="' +
 						obj.key1[key].img + '"></img></a></div><div class="col-md-5"><a href="' +
 						obj.key1[key].newsLink+ '" target="_blank"><p class="secondary">'+
@@ -760,7 +863,7 @@ $(document).ready(function(){
 				str ='<h2 class="text-center">Liked Articles</h2>';
 				for(var j = 0; j < likedArray.length; j++){
 					
-				 	str += '<div class="liked-news"><div class="row"><div class="col-md-1"></div><div class="col-md-4"><a href="' +
+				 	str += '<div class="news liked-news"><div class="row"><div class="col-md-5"><a href="' +
 						likedArray[j].newsLink+ '" target="_blank"><img src="' +
 						likedArray[j].img + '"></img></a></div><div class="col-md-5"><a href="' +
 						likedArray[j].newsLink+ '" target="_blank"><p class="one">'+

@@ -4,7 +4,8 @@ var express = require("express"),
 	passport = require("passport"),
 	session = require("express-session"),
 	TwitterStrategy = require("passport-twitter").Strategy,
-	Xray = require("x-ray");
+	Xray = require("x-ray"),
+	cron = require("node-cron");
 	
 var app = express();
 var x = Xray();
@@ -172,6 +173,16 @@ mongoose.connection.once("open", function(err){
 	
 });
 
+	app.post("/schedule", function(req, res){
+		
+		console.log("started");
+		cron.schedule('* * * * *', function(){
+			console.log('running every minute');
+			res.json({a:1});
+		});
+		
+	});
+
 	app.post("/disliked", function(req, res){
 		
 		var disliked = req.body.disliked;
@@ -198,6 +209,34 @@ mongoose.connection.once("open", function(err){
 				}
 				console.log("success");
 				res.json({a:1});
+				
+			});
+			
+		});
+		
+	});
+	
+	app.post("/remove", function(req, res){
+		
+		var index = req.body.removed;
+		
+		Db.findOne({username:userObj.username}, function(err, snippet){
+			
+			if(err||!snippet){
+				console.log(err);
+				return;
+			}
+			
+			snippet.favourite.splice(index, 1);
+			
+			Db.findOneAndUpdate({username:userObj.username}, {favourite:snippet.favourite}, function(err, updatedSnippet){
+				
+				if(err||!updatedSnippet){
+					console.log(err);
+					return;
+				}
+				
+				res.json(snippet.favourite);
 				
 			});
 			
