@@ -5,7 +5,7 @@ var newsObj;
 var arr = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
 var favString="";
 var likedArray=[];
-
+//http://www.nbc-news-scrap.herokuapp.com
 $(document).ready(function(){
 	
 	$('#profile-page').hide();
@@ -25,7 +25,7 @@ $(document).ready(function(){
 			},
 			success: function(){
 				$("#twitter").html("<i class='fa fa-twitter'> Sign in with Twitter");	
-				window.location = "http://127.0.0.1:8080";
+				window.location = "http://www.nbc-news-scrap.herokuapp.com";
 			}
 		});
 		
@@ -63,7 +63,7 @@ $(document).ready(function(){
 			success: function(obj){
 				
 				if(obj.a==1){
-					window.location="http://127.0.0.1:8080/auth/twitter";
+					window.location="http://www.nbc-news-scrap.herokuapp.com/auth/twitter";
 				}
 				else{
 					userObj== obj.key1;
@@ -737,7 +737,7 @@ $(document).ready(function(){
 		success: function(obj){
 		
 			if(obj.a==1){
-				window.location="http://127.0.0.1:8080/auth/twitter";
+				window.location="http://www.nbc-news-scrap.herokuapp.com/auth/twitter";
 			}
 			else{
 				userObj== obj;
@@ -750,14 +750,14 @@ $(document).ready(function(){
 	
 		id = $(this).prop('id');
 		var number=id;
-		/*
+		
 		if(id=="dislike"){
 			id= $(this).prop("class");
 			number= id.split(" ");
 			id=likedArray[Number(number[2])].title;
 			likedArray.splice(number[2],1);
 			
-				str ='';
+				str ='<h2 class="text-center">Liked Articles</h2>';
 				for(var j = 0; j < likedArray.length; j++){
 					
 				 	str += '<div class="liked-news"><div class="row"><div class="col-md-1"></div><div class="col-md-4"><a href="' +
@@ -778,8 +778,8 @@ $(document).ready(function(){
 			});
 			
 			return;
-		}*/
-		if(id==1){
+		}
+		else if(id==1){
 			id="one";
 			console.log(newsObj[id].title);
 		}
