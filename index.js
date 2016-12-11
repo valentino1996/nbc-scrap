@@ -120,7 +120,7 @@ mongoose.connection.once("open", function(err){
 	passport.use(new TwitterStrategy({
 		consumerKey: '7yqe1MKJmAHBBV97lro32cZi9',
 		consumerSecret: 'F573BNj9Daj1ohAjnT2Q79EUPwXv0c14r2gbsQbuX23Ct6iL4E',
-		callbackURL: "http://nbc-news-scrap.herokuapp.com/auth/twitter/callback"
+		callbackURL: "http://127.0.0.1:8080/auth/twitter/callback"
 	},
 	function(token, tokenSecret, profile, done) {
 		
@@ -171,6 +171,37 @@ mongoose.connection.once("open", function(err){
 	});
 	
 });
+
+	app.post("/disliked", function(req, res){
+		
+		var disliked = req.body.disliked;
+		console.log(disliked);
+		
+		Db.findOne({username:userObj.username}, function(err, snippet){
+			
+			if(err||!snippet){
+				console.log(err);
+				return;
+			}
+			//error is here
+			var arr = snippet.likes;
+			console.log(snippet.likes);
+			arr.splice(arr.indexOf(disliked), 1);
+			
+			Db.findOneAndUpdate({username:userObj.username}, {likes: arr}, function(err, updatedSnippet){
+				
+				if(err||!updatedSnippet){
+					console.log(err);
+					return;
+				}
+				console.log("success");
+				res.json({a:1});
+				
+			});
+			
+		});
+		
+	});
 	
 	app.post("/favourite", function(req, res){
 		
