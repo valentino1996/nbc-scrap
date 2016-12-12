@@ -198,7 +198,8 @@ mongoose.connection.once("open", function(err){
 	app.get("/daily", function(req, res){
 		var CronJob = require('cron').CronJob;
 		var job = new CronJob({
-		cronTime: '00 00 10 * * 1-5',
+		//cronTime: '00 00 10 * * 1-5',
+		cronTime: '* * * * *',
 		onTick: function() {
 
 		console.log("time");
