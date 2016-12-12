@@ -5,8 +5,8 @@ var express = require("express"),
 	session = require("express-session"),
 	TwitterStrategy = require("passport-twitter").Strategy,
 	Xray = require("x-ray"),
-	cron = require("node-cron"),
-	async = require("async");
+	CronJob = require("cron").CronJob,
+	events = require("events").EventEmitter;
 	
 var app = express();
 var x = Xray();
@@ -26,6 +26,7 @@ var user="";
 var userObj='';
 var idName ="";
 var sendObj={};
+var myEvent = new events();
 
 var token = '2538355556-GeEuOWBlO2wo7vi6zHq9nEOrfdGRIkZQT1wcW1P';
 var tokenSecret = 'fuSWRwwzBRVSQrskxEwSHIZoFBc0PJUydlkz94rLDyA9T';
@@ -158,8 +159,26 @@ mongoose.connection.once("open", function(err){
 		}
 	));
 	
-	app.post("/", function(req, res){
+	myEvent.on("newUser", function(){
+		console.log("success");
+		user="";
+		userObj='';
+		idName ="";
+		sendObj={};
 		
+	});
+	
+	app.get("/", function(req, res){
+		
+		user="";
+		userObj='';
+		idName ="";
+		sendObj={};
+		myEvent.emit("newUser");
+	});
+	
+	app.get("/home", function(req, res){
+		res.sendFile(__dirname+"/public/index.html");
 	});
 	
 	app.get('/liked', function(req, res){
@@ -177,13 +196,20 @@ mongoose.connection.once("open", function(err){
 });
 
 	app.get("/daily", function(req, res){
-		console.log("started");
-		cron.schedule('* * * * * *', function(){
-			console.log('running every second');
-			res.send("a");
+		var CronJob = require('cron').CronJob;
+		var job = new CronJob({
+		cronTime: '00 00 10 * * 1-5',
+		onTick: function() {
+
+		console.log("time");
+		job.stop();
+		res.send("a");
+		},
+		start: false,
+		timeZone: 'America/New_York'
 		});
-		
-	});
+		job.start();
+		});
 
 	app.post("/disliked", function(req, res){
 		
@@ -665,7 +691,7 @@ app.post("/deactivate", function(req, res){
 	});
 
 	app.get('/auth/twitter/callback',
-		passport.authenticate('twitter', { successRedirect: '/',
+		passport.authenticate('twitter', { successRedirect: '/home',
                                      failureRedirect: '/login' }));
 	
 

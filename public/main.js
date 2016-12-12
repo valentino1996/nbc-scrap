@@ -172,7 +172,115 @@ $(document).ready(function(){
 				
 			}
 	
-	$("#daily").on("click", "h6", function(){
+	$("#daily-world").on("click", function(){
+		
+		idDaily=$(this).prop("id");
+		$("#daily-text").html("Daily Topic Choosed!");
+		$.ajax({
+			url: "/daily",
+			type:"GET",
+			success: funct
+		});
+		
+	});
+	
+	$("#daily-politics").on("click", function(){
+		
+		idDaily=$(this).prop("id");
+		
+		$.ajax({
+			url: "/daily",
+			type:"GET",
+			success: funct
+		});
+		
+	});
+	
+	$("#daily-health").on("click", function(){
+		
+		idDaily=$(this).prop("id");
+		
+		$.ajax({
+			url: "/daily",
+			type:"GET",
+			success: funct
+		});
+		
+	});
+	
+	$("#daily-investigations").on("click", function(){
+		
+		idDaily=$(this).prop("id");
+		
+		$.ajax({
+			url: "/daily",
+			type:"GET",
+			success: funct
+		});
+		
+	});
+	
+	$("#daily-lifestyle").on("click", function(){
+		
+		idDaily=$(this).prop("id");
+		
+		$.ajax({
+			url: "/daily",
+			type:"GET",
+			success: funct
+		});
+		
+	});
+	
+	$("#daily-business").on("click", function(){
+		
+		idDaily=$(this).prop("id");
+		
+		$.ajax({
+			url: "/daily",
+			type:"GET",
+			success: funct
+		});
+		
+	});
+	
+	$("#daily-pop").on("click", function(){
+		
+		idDaily=$(this).prop("id");
+		
+		$.ajax({
+			url: "/daily",
+			type:"GET",
+			success: funct
+		});
+		
+	});
+	
+	$("#daily-tech").on("click", function(){
+		
+		idDaily=$(this).prop("id");
+		
+		$.ajax({
+			url: "/daily",
+			type:"GET",
+			success: funct
+		});
+		
+	});
+	
+	$("#daily-us").on("click", function(){
+		
+		idDaily=$(this).prop("id");
+		
+		$.ajax({
+			url: "/daily",
+			type:"GET",
+			success: funct
+		});
+		
+	});
+	
+	$("#daily-science").on("click", function(){
 		
 		idDaily=$(this).prop("id");
 		
@@ -252,7 +360,7 @@ $(document).ready(function(){
 				if(bool){
 					bool=false;
 					idDaily="topic-world";
-					funct;
+					$("#daily-world").trigger("click");
 				}
 			}
 		});
@@ -1116,18 +1224,6 @@ $(document).ready(function(){
 	
 });
 
-/*
-$(window).on("beforeunload", function(){
-	
-		$.ajax({
-			url:"/",
-			type:"POST",
-			dataType:"json",
-			data: {a:user_obj}
-		});
-	
-});
-*/
 $(window).on("load", function(){
 	
 	$.ajax({
