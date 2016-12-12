@@ -5,7 +5,8 @@ var express = require("express"),
 	session = require("express-session"),
 	TwitterStrategy = require("passport-twitter").Strategy,
 	Xray = require("x-ray"),
-	cron = require("node-cron");
+	cron = require("node-cron"),
+	async = require("async");
 	
 var app = express();
 var x = Xray();
@@ -23,10 +24,12 @@ app.use(session({
 
 var user="";
 var userObj='';
-var token = '2538355556-GeEuOWBlO2wo7vi6zHq9nEOrfdGRIkZQT1wcW1P';
-var tokenSecret = 'fuSWRwwzBRVSQrskxEwSHIZoFBc0PJUydlkz94rLDyA9T';
 var idName ="";
 var sendObj={};
+
+var token = '2538355556-GeEuOWBlO2wo7vi6zHq9nEOrfdGRIkZQT1wcW1P';
+var tokenSecret = 'fuSWRwwzBRVSQrskxEwSHIZoFBc0PJUydlkz94rLDyA9T';
+
 var obj = {
 	
 
@@ -98,7 +101,6 @@ mongoose.connect("mongodb://test:test@ds053156.mlab.com:53156/mongodb-test-valen
 	}
 });
 
-
 mongoose.connection.once("open", function(err){
 	
 	if(err){
@@ -121,7 +123,8 @@ mongoose.connection.once("open", function(err){
 	passport.use(new TwitterStrategy({
 		consumerKey: '7yqe1MKJmAHBBV97lro32cZi9',
 		consumerSecret: 'F573BNj9Daj1ohAjnT2Q79EUPwXv0c14r2gbsQbuX23Ct6iL4E',
-		callbackURL: "http://nbc-news-scrap.herokuapp.com/auth/twitter/callback"
+		//callbackURL: "http://nbc-news-scrap.herokuapp.com/auth/twitter/callback"
+		callbackURL: "http://127.0.0.1:8080/auth/twitter/callback"
 	},
 	function(token, tokenSecret, profile, done) {
 		
@@ -173,12 +176,11 @@ mongoose.connection.once("open", function(err){
 	
 });
 
-	app.post("/schedule", function(req, res){
-		
+	app.get("/daily", function(req, res){
 		console.log("started");
-		cron.schedule('* * * * *', function(){
-			console.log('running every minute');
-			res.json({a:1});
+		cron.schedule('* * * * * *', function(){
+			console.log('running every second');
+			res.send("a");
 		});
 		
 	});

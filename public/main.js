@@ -6,6 +6,8 @@ var arr = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine
 var favString="";
 var likedArray=[];
 var favouriteArray=[];
+var bool = false;
+var idDaily;
 //http://nbc-news-scrap.herokuapp.com
 
 $(document).ready(function(){
@@ -27,7 +29,8 @@ $(document).ready(function(){
 			},
 			success: function(){
 				$("#twitter").html("<i class='fa fa-twitter'> Sign in with Twitter");	
-				window.location = "http://nbc-news-scrap.herokuapp.com";
+				//window.location = "http://nbc-news-scrap.herokuapp.com";
+				window.location = "http://127.0.0.1:8080"
 			}
 		});
 		
@@ -55,23 +58,6 @@ $(document).ready(function(){
 				}
 			});
 		});
-		
-	$("#schedule").on("click", function(){
-		console.log("button pressed");
-		$.ajax({
-			url: "/schedule",
-			type: "POST",
-			data: {
-				
-			},
-			success: function(){
-				$("#x").trigger("click");
-				$("#world").trigger("click");
-				$("#schedule").trigger("click");
-			}
-		});
-		
-	});
 	
 	$('#twitter').on('click', function(){
 		
@@ -82,7 +68,8 @@ $(document).ready(function(){
 			success: function(obj){
 				
 				if(obj.a==1){
-					window.location="http://nbc-news-scrap.herokuapp.com/auth/twitter";
+					//window.location="http://nbc-news-scrap.herokuapp.com/auth/twitter";
+					window.location="http://127.0.0.1:8080/auth/twitter";
 				}
 				else{
 					userObj== obj.key1;
@@ -128,7 +115,74 @@ $(document).ready(function(){
 		
 	});
 	
+	var funct = function(){
+				
+				bool=true;
+				
+				if(idDaily=="daily-world"){
+					$("#world").trigger("click");
+					$("#x").trigger("click");
+					return;
+				}
+				else if(idDaily=="daily-politics"){
+					$("#politics").trigger("click");
+					$("#x").trigger("click");
+					return;
+				}
+				else if(idDaily=="daily-investigations"){
+					$("#invest").trigger("click");
+					$("#x").trigger("click");
+					return;
+				}
+				else if(idDaily=="daily-health"){
+					$("#health").trigger("click");
+					$("#x").trigger("click");
+					return;
+				}
+				else if(idDaily=="daily-science"){
+					$("#science").trigger("click");
+					$("#x").trigger("click");
+					return;
+				}
+				else if(idDaily=="daily-tech"){
+					$("#tech").trigger("click");
+					$("#x").trigger("click");
+					return;
+				}
+				else if(idDaily=="daily-pop"){
+					$("#popc").trigger("click");
+					$("#x").trigger("click");
+					return;
+				}
+				else if(idDaily=="daily-lifestyle"){
+					$("#lifestyle").trigger("click");
+					$("#x").trigger("click");
+					return;
+				}
+				else if(idDaily=="daily-business"){
+					$("#business").trigger("click");
+					$("#x").trigger("click");
+					return;
+				}
+				else if(idDaily=="daily-us"){
+					$("#us").trigger("click");
+					$("#x").trigger("click");
+					return;
+				}
+				
+			}
 	
+	$("#daily").on("click", "h6", function(){
+		
+		idDaily=$(this).prop("id");
+		
+		$.ajax({
+			url: "/daily",
+			type:"GET",
+			success: funct
+		});
+		
+	});
 	
 	$('#world').on('click', function(){
 		$.ajax({
@@ -195,7 +249,11 @@ $(document).ready(function(){
 					}
 					
 				});
-				
+				if(bool){
+					bool=false;
+					idDaily="topic-world";
+					funct;
+				}
 			}
 		});
 	});
@@ -265,6 +323,11 @@ $(document).ready(function(){
 					}
 					
 				});
+				if(bool){
+					bool=false;
+					idDaily="topic-politics";
+					funct;
+				}
 				
 			}
 		});
@@ -335,6 +398,11 @@ $(document).ready(function(){
 					}
 					
 				});
+				if(bool){
+					bool=false;
+					idDaily="topic-investigations";
+					funct;
+				}
 				
 			}
 		});
@@ -405,6 +473,11 @@ $(document).ready(function(){
 					}
 					
 				});
+				if(bool){
+					bool=false;
+					idDaily="topic-health";
+					funct;
+				}
 				
 			}
 		});
@@ -475,6 +548,11 @@ $(document).ready(function(){
 					}
 					
 				});
+				if(bool){
+					bool=false;
+					idDaily="topic-tech";
+					funct;
+				}
 				
 			}
 		});
@@ -545,6 +623,11 @@ $(document).ready(function(){
 					}
 					
 				});
+				if(bool){
+					bool=false;
+					idDaily="topic-science";
+					funct;
+				}
 				
 			}
 		});
@@ -615,6 +698,11 @@ $(document).ready(function(){
 					}
 					
 				});
+				if(bool){
+					bool=false;
+					idDaily="topic-pop";
+					funct;
+				}
 				
 			}
 		});
@@ -685,6 +773,11 @@ $(document).ready(function(){
 					}
 					
 				});
+				if(bool){
+					bool=false;
+					idDaily="topic-lifestyle";
+					funct;
+				}
 				
 			}
 		});
@@ -755,6 +848,11 @@ $(document).ready(function(){
 					}
 					
 				});
+				if(bool){
+					bool=false;
+					idDaily="topic-business";
+					funct;
+				}
 				
 			}
 		});
@@ -826,6 +924,11 @@ $(document).ready(function(){
 					}
 					
 				});
+				if(bool){
+					bool=false;
+					idDaily="topic-us";
+					funct;
+				}
 				
 		}
 	});
@@ -840,7 +943,8 @@ $(document).ready(function(){
 		success: function(obj){
 		
 			if(obj.a==1){
-				window.location="http://nbc-news-scrap.herokuapp.com/auth/twitter";
+				//window.location="http://nbc-news-scrap.herokuapp.com/auth/twitter";
+				window.location="http://127.0.0.1:8080/auth/twitter";
 			}
 			else{
 				userObj== obj;
