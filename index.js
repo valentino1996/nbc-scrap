@@ -123,8 +123,8 @@ mongoose.connection.once("open", function(err){
 	passport.use(new TwitterStrategy({
 		consumerKey: '7yqe1MKJmAHBBV97lro32cZi9',
 		consumerSecret: 'F573BNj9Daj1ohAjnT2Q79EUPwXv0c14r2gbsQbuX23Ct6iL4E',
-		//callbackURL: "http://nbc-news-scrap.herokuapp.com/auth/twitter/callback"
-		callbackURL: "http://127.0.0.1:8080/auth/twitter/callback"
+		callbackURL: "http://nbc-news-scrap.herokuapp.com/auth/twitter/callback"
+		//callbackURL: "http://127.0.0.1:8080/auth/twitter/callback"
 	},
 	function(token, tokenSecret, profile, done) {
 		

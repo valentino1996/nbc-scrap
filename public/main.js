@@ -29,8 +29,8 @@ $(document).ready(function(){
 			},
 			success: function(){
 				$("#twitter").html("<i class='fa fa-twitter'> Sign in with Twitter");	
-				//window.location = "http://nbc-news-scrap.herokuapp.com";
-				window.location = "http://127.0.0.1:8080"
+				window.location = "http://nbc-news-scrap.herokuapp.com";
+				//window.location = "http://127.0.0.1:8080"
 			}
 		});
 		
@@ -68,8 +68,8 @@ $(document).ready(function(){
 			success: function(obj){
 				
 				if(obj.a==1){
-					//window.location="http://nbc-news-scrap.herokuapp.com/auth/twitter";
-					window.location="http://127.0.0.1:8080/auth/twitter";
+					window.location="http://nbc-news-scrap.herokuapp.com/auth/twitter";
+					//window.location="http://127.0.0.1:8080/auth/twitter";
 				}
 				else{
 					userObj== obj.key1;
@@ -943,8 +943,8 @@ $(document).ready(function(){
 		success: function(obj){
 		
 			if(obj.a==1){
-				//window.location="http://nbc-news-scrap.herokuapp.com/auth/twitter";
-				window.location="http://127.0.0.1:8080/auth/twitter";
+				window.location="http://nbc-news-scrap.herokuapp.com/auth/twitter";
+				//window.location="http://127.0.0.1:8080/auth/twitter";
 			}
 			else{
 				userObj== obj;
