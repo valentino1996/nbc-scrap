@@ -26,6 +26,8 @@ var user="";
 var userObj='';
 var idName ="";
 var sendObj={};
+var number=0;
+var array=[];
 var myEvent = new events();
 
 var token = '2538355556-GeEuOWBlO2wo7vi6zHq9nEOrfdGRIkZQT1wcW1P';
@@ -121,6 +123,8 @@ mongoose.connection.once("open", function(err){
 		
 	}
 	
+	
+	
 	passport.use(new TwitterStrategy({
 		consumerKey: '7yqe1MKJmAHBBV97lro32cZi9',
 		consumerSecret: 'F573BNj9Daj1ohAjnT2Q79EUPwXv0c14r2gbsQbuX23Ct6iL4E',
@@ -165,20 +169,27 @@ mongoose.connection.once("open", function(err){
 		userObj='';
 		idName ="";
 		sendObj={};
+		number=0;
 		
 	});
 	
 	app.get("/", function(req, res){
 		
-		user="";
-		userObj='';
-		idName ="";
-		sendObj={};
-		myEvent.emit("newUser");
+		//res.sendFile(__dirname+"/public/index.html");
 	});
 	
 	app.get("/home", function(req, res){
+		console.log("new user");
+		myEvent.emit("newUser");
 		res.sendFile(__dirname+"/public/index.html");
+	});
+	
+	app.get("/user", function(req,res){
+		res.sendFile(__dirname+"/public/index.html");
+		if(array.indexOf(userObj.username)==-1){
+			array.push(userObj.username);
+		}
+		console.log(array);
 	});
 	
 	app.get('/liked', function(req, res){
@@ -196,13 +207,17 @@ mongoose.connection.once("open", function(err){
 });
 
 	app.get("/daily", function(req, res){
-		var CronJob = require('cron').CronJob;
+		number ++;
 		var job = new CronJob({
 		//cronTime: '00 00 10 * * 1-5',
 		cronTime: '* * * * *',
 		onTick: function() {
-
+		if(number>1){
+			number--;
+			job.stop();
+		}
 		console.log("time");
+		number--;
 		job.stop();
 		res.send("a");
 		},
@@ -210,7 +225,8 @@ mongoose.connection.once("open", function(err){
 		timeZone: 'America/New_York'
 		});
 		job.start();
-		});
+		
+	});
 
 	app.post("/disliked", function(req, res){
 		
@@ -692,7 +708,7 @@ app.post("/deactivate", function(req, res){
 	});
 
 	app.get('/auth/twitter/callback',
-		passport.authenticate('twitter', { successRedirect: '/home',
+		passport.authenticate('twitter', { successRedirect: '/user',
                                      failureRedirect: '/login' }));
 	
 

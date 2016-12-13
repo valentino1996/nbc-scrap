@@ -12,6 +12,14 @@ var idDaily;
 
 $(document).ready(function(){
 	
+	//if(location.href=="http://127.0.0.1:8080/"){
+		//window.location = "http://127.0.0.1:8080/home";
+	//}
+	
+	if(location.href=="http://nbc-news-scrap.herokuapp.com/"){
+		window.location = "http://nbc-news-scrap.herokuapp.com/home";
+	}
+	
 	$('#profile-page').hide();
 	
 	$('#x').on('click', function(){
@@ -29,8 +37,8 @@ $(document).ready(function(){
 			},
 			success: function(){
 				$("#twitter").html("<i class='fa fa-twitter'> Sign in with Twitter");	
-				window.location = "http://nbc-news-scrap.herokuapp.com";
-				//window.location = "http://127.0.0.1:8080"
+				//window.location = "http://nbc-news-scrap.herokuapp.com";
+				window.location = "http://127.0.0.1:8080"
 			}
 		});
 		
@@ -83,6 +91,11 @@ $(document).ready(function(){
 					favString="<h5>Favourite Topics :</h5>";
 					
 					for(var j=0; j<obj.key2.length; j++){
+						
+						if(obj.key2[j]==""){
+							j++;
+						}
+						
 						favString += 	'<div class="row"><div class="col-md-5"><h6>'+
 										obj.key2[j]+'</h6></div>'+
 										'<div class="col-md-3"><p id="'+j+'" class="remove-articles">x</p></div></div>';
@@ -175,7 +188,8 @@ $(document).ready(function(){
 	$("#daily-world").on("click", function(){
 		
 		idDaily=$(this).prop("id");
-		$("#daily-text").html("Daily Topic Choosed!");
+		$("#daily-chosen").html("Daily Topic Chosen");
+		$("#x").trigger("click");
 		$.ajax({
 			url: "/daily",
 			type:"GET",
@@ -187,6 +201,8 @@ $(document).ready(function(){
 	$("#daily-politics").on("click", function(){
 		
 		idDaily=$(this).prop("id");
+		$("#daily-chosen").html("Daily Topic Chosen");
+		$("#x").trigger("click");
 		
 		$.ajax({
 			url: "/daily",
@@ -199,6 +215,8 @@ $(document).ready(function(){
 	$("#daily-health").on("click", function(){
 		
 		idDaily=$(this).prop("id");
+		$("#daily-chosen").html("Daily Topic Chosen");
+		$("#x").trigger("click");
 		
 		$.ajax({
 			url: "/daily",
@@ -211,6 +229,8 @@ $(document).ready(function(){
 	$("#daily-investigations").on("click", function(){
 		
 		idDaily=$(this).prop("id");
+		$("#daily-chosen").html("Daily Topic Chosen");
+		$("#x").trigger("click");
 		
 		$.ajax({
 			url: "/daily",
@@ -223,6 +243,8 @@ $(document).ready(function(){
 	$("#daily-lifestyle").on("click", function(){
 		
 		idDaily=$(this).prop("id");
+		$("#daily-chosen").html("Daily Topic Chosen");
+		$("#x").trigger("click");
 		
 		$.ajax({
 			url: "/daily",
@@ -235,6 +257,8 @@ $(document).ready(function(){
 	$("#daily-business").on("click", function(){
 		
 		idDaily=$(this).prop("id");
+		$("#daily-chosen").html("Daily Topic Chosen");
+		$("#x").trigger("click");
 		
 		$.ajax({
 			url: "/daily",
@@ -247,6 +271,8 @@ $(document).ready(function(){
 	$("#daily-pop").on("click", function(){
 		
 		idDaily=$(this).prop("id");
+		$("#daily-chosen").html("Daily Topic Chosen");
+		$("#x").trigger("click");
 		
 		$.ajax({
 			url: "/daily",
@@ -259,6 +285,8 @@ $(document).ready(function(){
 	$("#daily-tech").on("click", function(){
 		
 		idDaily=$(this).prop("id");
+		$("#daily-chosen").html("Daily Topic Chosen");
+		$("#x").trigger("click");
 		
 		$.ajax({
 			url: "/daily",
@@ -271,6 +299,8 @@ $(document).ready(function(){
 	$("#daily-us").on("click", function(){
 		
 		idDaily=$(this).prop("id");
+		$("#daily-chosen").html("Daily Topic Chosen");
+		$("#x").trigger("click");
 		
 		$.ajax({
 			url: "/daily",
@@ -283,6 +313,8 @@ $(document).ready(function(){
 	$("#daily-science").on("click", function(){
 		
 		idDaily=$(this).prop("id");
+		$("#daily-chosen").html("Daily Topic Chosen");
+		$("#x").trigger("click");
 		
 		$.ajax({
 			url: "/daily",
@@ -435,6 +467,7 @@ $(document).ready(function(){
 					bool=false;
 					idDaily="topic-politics";
 					funct;
+					$("#daily-politics").trigger("click");
 				}
 				
 			}
@@ -510,6 +543,7 @@ $(document).ready(function(){
 					bool=false;
 					idDaily="topic-investigations";
 					funct;
+					$("#daily-investigations").trigger("click");
 				}
 				
 			}
@@ -585,6 +619,7 @@ $(document).ready(function(){
 					bool=false;
 					idDaily="topic-health";
 					funct;
+					$("#daily-health").trigger("click");
 				}
 				
 			}
@@ -660,6 +695,7 @@ $(document).ready(function(){
 					bool=false;
 					idDaily="topic-tech";
 					funct;
+					$("#daily-tech").trigger("click");
 				}
 				
 			}
@@ -735,6 +771,7 @@ $(document).ready(function(){
 					bool=false;
 					idDaily="topic-science";
 					funct;
+					$("#daily-science").trigger("click");
 				}
 				
 			}
@@ -810,6 +847,7 @@ $(document).ready(function(){
 					bool=false;
 					idDaily="topic-pop";
 					funct;
+					$("#daily-pop").trigger("click");
 				}
 				
 			}
@@ -885,6 +923,7 @@ $(document).ready(function(){
 					bool=false;
 					idDaily="topic-lifestyle";
 					funct;
+					$("#daily-lifestyle").trigger("click");
 				}
 				
 			}
@@ -960,6 +999,7 @@ $(document).ready(function(){
 					bool=false;
 					idDaily="topic-business";
 					funct;
+					$("#daily-business").trigger("click");
 				}
 				
 			}
@@ -1036,6 +1076,7 @@ $(document).ready(function(){
 					bool=false;
 					idDaily="topic-us";
 					funct;
+					$("#daily-us").trigger("click");
 				}
 				
 		}
