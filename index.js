@@ -23,12 +23,27 @@ app.use(session({
   secret: 'bla bla bla' 
 }));
 
+var array=[];
+var arr = [];
+
+mongoose.connect("mongodb://test:test@ds053156.mlab.com:53156/mongodb-test-valentino", function (err) {
+	
+	if (err) {
+		console.log('Unable to connect to the mongoDB server. Error:', err);
+	}
+	
+	else {
+		console.log('Connection established');
+	}
+});
+
+function start(){
+
 var user="";
 var userObj='';
 var idName ="";
 var sendObj={};
 var number=0;
-var array=[];
 var myEvent = new events();
 
 var token = '2538355556-GeEuOWBlO2wo7vi6zHq9nEOrfdGRIkZQT1wcW1P';
@@ -93,17 +108,6 @@ var obj = {
 		
 	};
 
-
-mongoose.connect("mongodb://test:test@ds053156.mlab.com:53156/mongodb-test-valentino", function (err) {
-	
-	if (err) {
-		console.log('Unable to connect to the mongoDB server. Error:', err);
-	}
-	
-	else {
-		console.log('Connection established');
-	}
-});
 
 mongoose.connection.once("open", function(err){
 	
@@ -187,13 +191,13 @@ mongoose.connection.once("open", function(err){
 	
 	app.get("/user", function(req,res){
 		res.sendFile(__dirname+"/public/index.html");
-		if(array.indexOf(userObj.username)==-1){
+		//if(array.indexOf(userObj.username)==-1){
 			array.push(userObj.username);
-		}
+		//}
 		console.log(array);
-		res.redirect("/user/"+userObj.username);
+		//res.redirect("/user/"+userObj.username);
 	});
-	
+	/*
 	app.get("/user/:twitterUsername", function(req, res){
 		
 		var twitterUsername = req.params.twitterUsername;
@@ -207,7 +211,7 @@ mongoose.connection.once("open", function(err){
 		}
 		
 	});
-	
+	*/
 	app.get('/liked', function(req, res){
 	
 	Db.findOne({username: userObj.username}, function(err, snippet){
@@ -729,5 +733,21 @@ app.post("/deactivate", function(req, res){
 	
 
 });
+};
 
-app.listen(process.env.PORT||8080);
+app.listen(process.env.PORT||8080, function(){
+	/*
+	arr.push(function(callback){
+		callback(null, start());
+	});
+	
+	async.parallel(arr, function(err, result){
+		
+		console.log("user");
+		
+	});
+	*/
+	start();
+	
+	
+});
