@@ -6,7 +6,8 @@ var express = require("express"),
 	TwitterStrategy = require("passport-twitter").Strategy,
 	Xray = require("x-ray"),
 	CronJob = require("cron").CronJob,
-	events = require("events").EventEmitter;
+	events = require("events").EventEmitter
+	async = require("async");
 	
 var app = express();
 var x = Xray();
@@ -128,8 +129,8 @@ mongoose.connection.once("open", function(err){
 	passport.use(new TwitterStrategy({
 		consumerKey: '7yqe1MKJmAHBBV97lro32cZi9',
 		consumerSecret: 'F573BNj9Daj1ohAjnT2Q79EUPwXv0c14r2gbsQbuX23Ct6iL4E',
-		callbackURL: "http://nbc-news-scrap.herokuapp.com/auth/twitter/callback"
-		//callbackURL: "http://127.0.0.1:8080/auth/twitter/callback"
+		//callbackURL: "http://nbc-news-scrap.herokuapp.com/auth/twitter/callback"
+		callbackURL: "http://127.0.0.1:8080/auth/twitter/callback"
 	},
 	function(token, tokenSecret, profile, done) {
 		
@@ -190,6 +191,21 @@ mongoose.connection.once("open", function(err){
 			array.push(userObj.username);
 		}
 		console.log(array);
+		res.redirect("/user/"+userObj.username);
+	});
+	
+	app.get("/user/:twitterUsername", function(req, res){
+		
+		var twitterUsername = req.params.twitterUsername;
+		
+		if(array.indexOf(twitterUsername)!=-1){
+			res.sendFile(__dirname+"/public/index.html");
+		}
+		
+		else{
+			res.send("bad request");
+		}
+		
 	});
 	
 	app.get('/liked', function(req, res){
