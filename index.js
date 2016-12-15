@@ -37,7 +37,7 @@ mongoose.connect("mongodb://test:test@ds053156.mlab.com:53156/mongodb-test-valen
 	}
 });
 
-function start(){
+//function start(){
 
 var user="";
 var userObj='';
@@ -195,9 +195,9 @@ mongoose.connection.once("open", function(err){
 			array.push(userObj.username);
 		//}
 		console.log(array);
-		//res.redirect("/user/"+userObj.username);
+		res.redirect("/user/"+userObj.username);
 	});
-	/*
+	
 	app.get("/user/:twitterUsername", function(req, res){
 		
 		var twitterUsername = req.params.twitterUsername;
@@ -211,7 +211,7 @@ mongoose.connection.once("open", function(err){
 		}
 		
 	});
-	*/
+	
 	app.get('/liked', function(req, res){
 	
 	Db.findOne({username: userObj.username}, function(err, snippet){
@@ -733,7 +733,7 @@ app.post("/deactivate", function(req, res){
 	
 
 });
-};
+//};
 
 app.listen(process.env.PORT||8080, function(){
 	/*
@@ -747,7 +747,7 @@ app.listen(process.env.PORT||8080, function(){
 		
 	});
 	*/
-	start();
+	//start();
 	
 	
 });
