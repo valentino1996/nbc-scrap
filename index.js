@@ -778,19 +778,4 @@ app.post("/deactivate", function(req, res){
 });
 //};
 
-app.listen(process.env.PORT||8080, function(){
-	/*
-	arr.push(function(callback){
-		callback(null, start());
-	});
-	
-	async.parallel(arr, function(err, result){
-		
-		console.log("user");
-		
-	});
-	*/
-	//start();
-	
-	
-});
+app.listen(process.env.PORT||8080);
