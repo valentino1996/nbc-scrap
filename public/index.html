@@ -237,8 +237,12 @@ $(document).ready(function(){
 										obj.key2[j]+'</h6></div>'+
 										'<div class="col-md-3"><p id="'+j+'" class="remove-articles">x</p></div></div>';
 					}
-					}
+					
 					$("#fav-text").html(favString);
+					}
+					else{
+					$("#fav-text").html("");
+					}
 					$('#profile-page').show();
 					$('#field').css("position", "fixed");
 				}
