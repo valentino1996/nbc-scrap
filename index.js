@@ -6,13 +6,16 @@ var express = require("express"),
 	TwitterStrategy = require("passport-twitter").Strategy,
 	Xray = require("x-ray"),
 	CronJob = require("cron").CronJob,
-	events = require("events").EventEmitter
-	async = require("async");
+	events = require("events").EventEmitter,
+	async = require("async"),
+	path = require("path");
 	
 var app = express();
 var x = Xray();
 
 app.use(express.static("public"));
+//app.use(express.static(path.join(__dirname, 'public/index.html')));
+//app.use(express.static(path.join(__dirname + 'public/style.css')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(passport.initialize());
@@ -133,8 +136,8 @@ mongoose.connection.once("open", function(err){
 	passport.use(new TwitterStrategy({
 		consumerKey: '7yqe1MKJmAHBBV97lro32cZi9',
 		consumerSecret: 'F573BNj9Daj1ohAjnT2Q79EUPwXv0c14r2gbsQbuX23Ct6iL4E',
-		//callbackURL: "http://nbc-news-scrap.herokuapp.com/auth/twitter/callback"
-		callbackURL: "http://127.0.0.1:8080/auth/twitter/callback"
+		callbackURL: "http://nbc-news-scrap.herokuapp.com/auth/twitter/callback"
+		//callbackURL: "http://127.0.0.1:8080/auth/twitter/callback"
 	},
 	function(token, tokenSecret, profile, done) {
 		
