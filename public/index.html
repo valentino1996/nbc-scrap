@@ -231,6 +231,7 @@ $(document).ready(function(){
 						
 						if(obj.key2[j]==""){
 							j++;
+							continue;
 						}
 						
 						favString += 	'<div class="row"><div class="col-md-5"><h6>'+
@@ -468,6 +469,9 @@ $(document).ready(function(){
 	});
 	
 	$('#world').on('click', function(){
+	
+		$("#x").trigger("click");
+		
 		$.ajax({
 			url: '/world',
 			type: 'POST',
@@ -545,6 +549,9 @@ $(document).ready(function(){
 	});
 	
 	$('#politics').on('click', function(){
+	
+		$("#x").trigger("click");
+		
 		$.ajax({
 			url: '/politics',
 			type: 'POST',
@@ -624,6 +631,9 @@ $(document).ready(function(){
 	});
 	
 	$('#invest').on('click', function(){
+	
+		$("#x").trigger("click");
+		
 		$.ajax({
 			url: '/invest',
 			type: 'POST',
@@ -703,6 +713,9 @@ $(document).ready(function(){
 	});
 	
 	$('#health').on('click', function(){
+	
+		$("#x").trigger("click");
+		
 		$.ajax({
 			url: '/health',
 			type: 'POST',
@@ -782,6 +795,9 @@ $(document).ready(function(){
 	});
 	
 	$('#tech').on('click', function(){
+	
+		$("#x").trigger("click");
+		
 		$.ajax({
 			url: '/tech',
 			type: 'POST',
@@ -861,6 +877,9 @@ $(document).ready(function(){
 	});
 	
 	$('#science').on('click', function(){
+	
+		$("#x").trigger("click");
+		
 		$.ajax({
 			url: '/science',
 			type: 'POST',
@@ -940,6 +959,9 @@ $(document).ready(function(){
 	});
 	
 	$('#popc').on('click', function(){
+	
+		$("#x").trigger("click");
+		
 		$.ajax({
 			url: '/popculture',
 			type: 'POST',
@@ -1019,6 +1041,9 @@ $(document).ready(function(){
 	});
 	
 	$('#lifestyle').on('click', function(){
+	
+		$("#x").trigger("click");
+		
 		$.ajax({
 			url: '/lifestyle',
 			type: 'POST',
@@ -1098,6 +1123,9 @@ $(document).ready(function(){
 	});
 	
 	$('#business').on('click', function(){
+	
+		$("#x").trigger("click");
+		
 		$.ajax({
 			url: '/business',
 			type: 'POST',
@@ -1177,6 +1205,9 @@ $(document).ready(function(){
 	});
 	
 	$('#us').on('click', function(){
+	
+		$("#x").trigger("click");
+		
 		$.ajax({
 			url: '/us',
 			type: 'POST',
