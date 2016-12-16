@@ -193,7 +193,8 @@ mongoose.connection.once("open", function(err){
 	});
 	
 	app.get("/user", function(req,res){
-		res.sendFile(__dirname+"/public/index.html");
+		
+		//res.sendFile(__dirname+"/public/index.html");
 		//if(array.indexOf(userObj.username)==-1){
 			array.push(userObj.username);
 		//}
@@ -232,8 +233,8 @@ mongoose.connection.once("open", function(err){
 	app.get("/daily", function(req, res){
 		number ++;
 		var job = new CronJob({
-		//cronTime: '00 00 10 * * 1-5',
-		cronTime: '* * * * *',
+		cronTime: '00 00 10 * * 1-5',
+		//cronTime: '* * * * *',
 		onTick: function() {
 		if(number>1){
 			number--;
