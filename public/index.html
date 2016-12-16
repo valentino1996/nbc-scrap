@@ -132,6 +132,10 @@ var likedArray=[];
 var favouriteArray=[];
 var bool = false;
 var idDaily;
+
+var urlUsername = location.href.split("/");
+var strUsername = urlUsername[urlUsername.length-1];
+console.log(strUsername);
 //http://nbc-news-scrap.herokuapp.com
 
 $(document).ready(function(){
@@ -157,7 +161,7 @@ $(document).ready(function(){
 			url:"/deactivate",
 			type:"POST",
 			data:{
-				user:userObj.username
+				username:strUsername
 			},
 			success: function(){
 				$("#twitter").html("<i class='fa fa-twitter'> Sign in with Twitter");	
@@ -171,7 +175,10 @@ $(document).ready(function(){
 	$('#like').on('click', function(){
 		$.ajax({
 			url: '/liked',
-			type: 'GET',
+			type: 'POST',
+			data: {
+				username: strUsername
+			},
 			success: function(array){
 				likedArray = array;
 				str ='<h2 class="text-center">Liked Articles</h2>';
@@ -197,6 +204,9 @@ $(document).ready(function(){
 			url: '/twitter',
 			type: 'POST',
 			dataType: 'json',
+			data: {
+				username: strUsername
+			},
 			success: function(obj){
 				
 				if(obj.a==1){
@@ -243,7 +253,8 @@ $(document).ready(function(){
 			url: "/remove",
 			type: "POST",
 			data: {
-				removed: id
+				removed: id,
+				username: strUsername
 			},
 			success: function(obj){
 				$("#twitter").trigger("click");
@@ -451,7 +462,10 @@ $(document).ready(function(){
 	$('#world').on('click', function(){
 		$.ajax({
 			url: '/world',
-			type: 'GET',
+			type: 'POST',
+			data: {
+				username: strUsername
+			},
 			success: function(obj){
 				newsObj=obj.key1;
 				str ='<h2 class="text-center">World\t<i id="topic-world" class="fa fa-star star-btn"></i></h2>';
@@ -525,7 +539,10 @@ $(document).ready(function(){
 	$('#politics').on('click', function(){
 		$.ajax({
 			url: '/politics',
-			type: 'GET',
+			type: 'POST',
+			data: {
+				username: strUsername
+			},
 			success: function(obj){
 				newsObj=obj.key1;
 				str = '<h2 class="text-center">Politics\t<i id="topic-politics" class="fa fa-star star-btn"></i></h2>';
@@ -601,7 +618,10 @@ $(document).ready(function(){
 	$('#invest').on('click', function(){
 		$.ajax({
 			url: '/invest',
-			type: 'GET',
+			type: 'POST',
+			data: {
+				username: strUsername
+			},
 			success: function(obj){
 				newsObj=obj.key1;
 				str = '<h2 class="text-center">Investigations\t<i id="topic-investigation" class="fa fa-star star-btn"></i></h2>';
@@ -677,7 +697,10 @@ $(document).ready(function(){
 	$('#health').on('click', function(){
 		$.ajax({
 			url: '/health',
-			type: 'GET',
+			type: 'POST',
+			data: {
+				username: strUsername
+			},
 			success: function(obj){
 				newsObj=obj.key1;
 				str = '<h2 class="text-center">Health\t<i id="topic-health" class="fa fa-star star-btn"></i></h2>';
@@ -753,7 +776,10 @@ $(document).ready(function(){
 	$('#tech').on('click', function(){
 		$.ajax({
 			url: '/tech',
-			type: 'GET',
+			type: 'POST',
+			data: {
+				username: strUsername
+			},
 			success: function(obj){
 				newsObj=obj.key1;
 				str = '<h2 class="text-center">Tech\t<i id="topic-tech" class="fa fa-star star-btn"></i></h2>';
@@ -829,7 +855,10 @@ $(document).ready(function(){
 	$('#science').on('click', function(){
 		$.ajax({
 			url: '/science',
-			type: 'GET',
+			type: 'POST',
+			data: {
+				username: strUsername
+			},
 			success: function(obj){
 				newsObj=obj.key1;
 				str = '<h2 class="text-center">Science\t<i id="topic-science" class="fa fa-star star-btn"></i></h2>';
@@ -905,7 +934,10 @@ $(document).ready(function(){
 	$('#popc').on('click', function(){
 		$.ajax({
 			url: '/popculture',
-			type: 'GET',
+			type: 'POST',
+			data: {
+				username: strUsername
+			},
 			success: function(obj){
 				newsObj=obj.key1;
 				str = '<h2 class="text-center">Pop-Culture\t<i id="topic-pop-culture" class="fa fa-star star-btn"></i></h2>';
@@ -981,7 +1013,10 @@ $(document).ready(function(){
 	$('#lifestyle').on('click', function(){
 		$.ajax({
 			url: '/lifestyle',
-			type: 'GET',
+			type: 'POST',
+			data: {
+				username: strUsername
+			},
 			success: function(obj){
 				newsObj=obj.key1;
 				str = '<h2 class="text-center">Lifestyle\t<i id="topic-lifestyle" class="fa fa-star star-btn"></i></h2>';
@@ -1057,7 +1092,10 @@ $(document).ready(function(){
 	$('#business').on('click', function(){
 		$.ajax({
 			url: '/business',
-			type: 'GET',
+			type: 'POST',
+			data: {
+				username: strUsername
+			},
 			success: function(obj){
 				newsObj=obj.key1;
 				str = '<h2 class="text-center">Business\t<i id="topic-business" class="fa fa-star star-btn"></i></h2>';
@@ -1133,7 +1171,10 @@ $(document).ready(function(){
 	$('#us').on('click', function(){
 		$.ajax({
 			url: '/us',
-			type: 'GET',
+			type: 'POST',
+			data: {
+				username: strUsername
+			},
 			success: function(obj){
 				newsObj=obj.key1;
 				str = '<h2 class="text-center">US-News\t<i id="topic-us" class="fa fa-star star-btn"></i></h2>';
@@ -1213,6 +1254,9 @@ $(document).ready(function(){
 		$.ajax({
 		url:"/twitter",
 		type:"POST",
+		data: {
+		 username: strUsername
+		},
 		success: function(obj){
 		
 			if(obj.a==1){
@@ -1253,7 +1297,8 @@ $(document).ready(function(){
 				url: "/disliked",
 				type:"POST",
 				data: {
-					disliked: id
+					disliked: id,
+					username: strUsername
 				}
 			});
 			
@@ -1310,7 +1355,8 @@ $(document).ready(function(){
 				url:"/favourite",
 				type:"POST",
 				data:{
-					topic: id
+					topic: id,
+					username: strUsername
 				},
 				success: function(topicData){
 					
@@ -1352,7 +1398,8 @@ $(document).ready(function(){
 			data:{
 				newsLink: newsObj[id].newsLink,
 				img: newsObj[id].img,
-				title: newsObj[id].title
+				title: newsObj[id].title,
+				username: strUsername
 			},
 			success: function(likes){
 				
@@ -1394,6 +1441,9 @@ $(window).on("load", function(){
 	$.ajax({
 		url:"/twitter",
 		type:"POST",
+		data: {
+		 username: strUsername
+		},
 		success: function(obj){
 		
 			if(obj.a==1){

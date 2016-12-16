@@ -124,7 +124,9 @@ mongoose.connection.once("open", function(err){
 			username: {type: String, unique:true},
 			favourite: {type: Array},
 			likes: {type: Array},
-			fullNews: {type: Array}
+			fullNews: {type: Array},
+			photo: {type:String},
+			displayName: {type: String}
 		});
 		
 		var Db = mongoose.model("NBC User", schema);
@@ -148,7 +150,7 @@ mongoose.connection.once("open", function(err){
 				photo: profile.photos[0].value
 			};
 			
-			Db.create({username: userObj.username, favourite:"", likes:[], fullNews:[]}, function(err, snippet){
+			Db.create({username: userObj.username, favourite:"", likes:[], fullNews:[], photo: userObj.photo, displayName: userObj.displayName }, function(err, snippet){
 				
 				if(err||!snippet){
 					console.log(err);
@@ -216,9 +218,11 @@ mongoose.connection.once("open", function(err){
 		
 	});
 	
-	app.get('/liked', function(req, res){
+	app.post('/liked', function(req, res){
+		
+		var username = req.body.username;
 	
-	Db.findOne({username: userObj.username}, function(err, snippet){
+	Db.findOne({username: username}, function(err, snippet){
 	
 		if(err || !snippet){
 			console.log(err);
@@ -254,10 +258,12 @@ mongoose.connection.once("open", function(err){
 
 	app.post("/disliked", function(req, res){
 		
+		var username = req.body.username;
+		
 		var disliked = req.body.disliked;
 		console.log(disliked);
 		
-		Db.findOne({username:userObj.username}, function(err, snippet){
+		Db.findOne({username:username}, function(err, snippet){
 			
 			if(err||!snippet){
 				console.log(err);
@@ -266,11 +272,13 @@ mongoose.connection.once("open", function(err){
 			//error is here
 			var arr = snippet.likes;
 			var index = arr.indexOf(disliked);
+			
 			console.log(arr);
 			arr.splice(index, 1);
 			snippet.fullNews.splice(index, 1)
 			console.log(snippet.fullNews);
-			Db.findOneAndUpdate({username:userObj.username}, {likes: arr, fullNews: snippet.fullNews}, function(err, updatedSnippet){
+			
+			Db.findOneAndUpdate({username:username}, {likes: arr, fullNews: snippet.fullNews}, function(err, updatedSnippet){
 				
 				if(err||!updatedSnippet){
 					console.log(err);
@@ -288,8 +296,9 @@ mongoose.connection.once("open", function(err){
 	app.post("/remove", function(req, res){
 		
 		var index = req.body.removed;
+		var username = req.body.username;
 		
-		Db.findOne({username:userObj.username}, function(err, snippet){
+		Db.findOne({username:username}, function(err, snippet){
 			
 			if(err||!snippet){
 				console.log(err);
@@ -298,7 +307,7 @@ mongoose.connection.once("open", function(err){
 			
 			snippet.favourite.splice(index, 1);
 			
-			Db.findOneAndUpdate({username:userObj.username}, {favourite:snippet.favourite}, function(err, updatedSnippet){
+			Db.findOneAndUpdate({username:username}, {favourite:snippet.favourite}, function(err, updatedSnippet){
 				
 				if(err||!updatedSnippet){
 					console.log(err);
@@ -316,8 +325,9 @@ mongoose.connection.once("open", function(err){
 	app.post("/favourite", function(req, res){
 		
 		var favourite = req.body.topic;
+		var username = req.body.username;
 		
-		Db.findOne({username:userObj.username}, function(err, snippet){
+		Db.findOne({username:username}, function(err, snippet){
 			
 			if(err||!snippet){
 				console.log(err);
@@ -332,7 +342,7 @@ mongoose.connection.once("open", function(err){
 				arr.splice(snippet.favourite.indexOf(favourite),1);
 			}
 			
-			Db.findOneAndUpdate({username:userObj.username}, {favourite:arr}, function(err, updatedSnippet){
+			Db.findOneAndUpdate({username:username}, {favourite:arr}, function(err, updatedSnippet){
 				
 				if(err||!updatedSnippet){
 					console.log(err);
@@ -349,11 +359,12 @@ mongoose.connection.once("open", function(err){
 	
 	app.post("/likes", function(req, res){
 		
+		var username = req.body.username;
 		var article = req.body.title;
 		var fullNews = {newsLink:req.body.newsLink, img:req.body.img, title:req.body.title};
 		console.log(article);
 		
-		Db.findOne({username:userObj.username}, function(err, snippet){
+		Db.findOne({username:username}, function(err, snippet){
 			
 			if(err||!snippet){
 				console.log(err);
@@ -371,7 +382,7 @@ mongoose.connection.once("open", function(err){
 				snippet.fullNews.splice(index,1);
 			}
 			
-			Db.findOneAndUpdate({username:userObj.username}, {likes:arr, fullNews:snippet.fullNews}, function(err, updatedSnippet){
+			Db.findOneAndUpdate({username:username}, {likes:arr, fullNews:snippet.fullNews}, function(err, updatedSnippet){
 				
 				if(err||!updatedSnippet){
 					console.log(err);
@@ -388,17 +399,21 @@ mongoose.connection.once("open", function(err){
 	
 	app.post("/twitter", function(req, res){
 	
+		var username = req.body.username;
+	
 	if(userObj==''){
 		res.json({a:1});
 		return;
 	}
 	
-	Db.findOne({username:userObj.username}, function(err, snippet){
+	Db.findOne({username:username}, function(err, snippet){
 		
 		if(err||!snippet){
 			console.log(err);
 			return;
 		}
+		
+		userObj = {username: username, photo: snippet.photo, displayName: snippet.displayName}
 	
 		res.json({key1:userObj,key2:snippet.favourite});
 	
@@ -406,11 +421,13 @@ mongoose.connection.once("open", function(err){
 	
 });
 
-	app.get("/health", function(req, res){
+	app.post("/health", function(req, res){
+	
+		var username = req.body.username;
 	
 		idName="#health-section";
 	
-	Db.findOne({username:userObj.username}, function(err, snippet){
+	Db.findOne({username:username}, function(err, snippet){
 
 		x('http://www.nbcnews.com/health', obj)(function(err, code) {
 			
@@ -436,11 +453,13 @@ mongoose.connection.once("open", function(err){
 	
 });
 
-	app.get("/world", function(req, res){
+	app.post("/world", function(req, res){
+		
+		var username = req.body.username;
 	
 	idName="#world-section";
 	
-	Db.findOne({username:userObj.username}, function(err, snippet){
+	Db.findOne({username:username}, function(err, snippet){
 
 		x('http://www.nbcnews.com/news/world', obj)(function(err, code) {
 			
@@ -466,11 +485,13 @@ mongoose.connection.once("open", function(err){
 	
 });
 
-app.get("/politics", function(req, res){
+app.post("/politics", function(req, res){
+	
+		var username = req.body.username;
 	
 	idName="#politics-section";
 	
-	Db.findOne({username:userObj.username}, function(err, snippet){
+	Db.findOne({username:username}, function(err, snippet){
 
 		x('http://www.nbcnews.com/politics', obj)(function(err, code) {
 			
@@ -496,11 +517,13 @@ app.get("/politics", function(req, res){
 	
 });
 
-app.get("/invest", function(req, res){
+app.post("/invest", function(req, res){
+	
+		var username = req.body.username;
 	
 	idName="#investigations-section";
 	
-	Db.findOne({username:userObj.username}, function(err, snippet){
+	Db.findOne({username:username}, function(err, snippet){
 
 		x('http://www.nbcnews.com/news/investigations', obj)(function(err, code) {
 			
@@ -526,11 +549,13 @@ app.get("/invest", function(req, res){
 	
 });
 
-app.get("/tech", function(req, res){
+app.post("/tech", function(req, res){
+	
+		var username = req.body.username;
 	
 	idName="#tech-section";
 	
-	Db.findOne({username:userObj.username}, function(err, snippet){
+	Db.findOne({username:username}, function(err, snippet){
 
 		x('http://www.nbcnews.com/tech', obj)(function(err, code) {
 			
@@ -556,11 +581,13 @@ app.get("/tech", function(req, res){
 	
 });
 
-app.get("/science", function(req, res){
+app.post("/science", function(req, res){
+	
+		var username = req.body.username;
 	
 	idName ="#science-section";
 	
-	Db.findOne({username:userObj.username}, function(err, snippet){
+	Db.findOne({username:username}, function(err, snippet){
 
 		x('http://www.nbcnews.com/science', obj)(function(err, code) {
 			
@@ -586,11 +613,13 @@ app.get("/science", function(req, res){
 	
 });
 
-app.get("/popculture", function(req, res){
+app.post("/popculture", function(req, res){
+	
+		var username = req.body.username;
 	
 	idName ="#pop-culture-section";
 	
-	Db.findOne({username:userObj.username}, function(err, snippet){
+	Db.findOne({username:username}, function(err, snippet){
 
 		x('http://www.nbcnews.com/pop-culture', obj)(function(err, code) {
 			
@@ -616,11 +645,13 @@ app.get("/popculture", function(req, res){
 	
 });
 
-app.get("/lifestyle", function(req, res){
+app.post("/lifestyle", function(req, res){
+	
+		var username = req.body.username;
 	
 	idName ="#lifestyle-section";
 	
-	Db.findOne({username:userObj.username}, function(err, snippet){
+	Db.findOne({username:username}, function(err, snippet){
 
 		x('http://www.nbcnews.com/pop-culture/lifestyle', obj)(function(err, code) {
 			
@@ -646,11 +677,13 @@ app.get("/lifestyle", function(req, res){
 	
 });
 
-app.get("/business", function(req, res){
+app.post("/business", function(req, res){
+	
+		var username = req.body.username;
 	
 	idName ="#business-section";
 	
-	Db.findOne({username:userObj.username}, function(err, snippet){
+	Db.findOne({username:username}, function(err, snippet){
 
 		x('http://www.nbcnews.com/business', obj)(function(err, code) {
 			
@@ -676,11 +709,13 @@ app.get("/business", function(req, res){
 	
 });
 
-app.get("/us", function(req, res){
+app.post("/us", function(req, res){
+	
+		var username = req.body.username;
 	
 	idName ="#us-news-section";
 	
-	Db.findOne({username:userObj.username}, function(err, snippet){
+	Db.findOne({username:username}, function(err, snippet){
 
 		x('http://www.nbcnews.com/news/us-news', obj)(function(err, code) {
 			
@@ -707,7 +742,10 @@ app.get("/us", function(req, res){
 });
 
 app.post("/deactivate", function(req, res){
-	Db.findOneAndRemove({username:userObj.username}, function(err, snippet){
+	
+	var username = req.body.username;
+	
+	Db.findOneAndRemove({username:username}, function(err, snippet){
 		
 		if(err||!snippet){
 			console.log(err);
@@ -718,6 +756,7 @@ app.post("/deactivate", function(req, res){
 		userObj='';
 		idName ="";
 		sendObj={};
+		number=0;
 		
 		res.json({a:1});
 		
