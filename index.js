@@ -14,8 +14,6 @@ var app = express();
 var x = Xray();
 
 app.use(express.static("public"));
-//app.use(express.static(path.join(__dirname, 'public/index.html')));
-//app.use(express.static(path.join(__dirname + 'public/style.css')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(passport.initialize());
@@ -28,6 +26,7 @@ app.use(session({
 
 var array=[];
 var arr = [];
+var scheduleObj={key1:[],key2:[]};
 
 mongoose.connect("mongodb://test:test@ds053156.mlab.com:53156/mongodb-test-valentino", function (err) {
 	
@@ -150,7 +149,7 @@ mongoose.connection.once("open", function(err){
 				photo: profile.photos[0].value
 			};
 			
-			Db.create({username: userObj.username, favourite:"", likes:[], fullNews:[], photo: userObj.photo, displayName: userObj.displayName }, function(err, snippet){
+			Db.create({username: userObj.username, favourite:"", likes:[], fullNews:[], photo: userObj.photo, displayName: userObj.displayName}, function(err, snippet){
 				
 				if(err||!snippet){
 					console.log(err);
@@ -222,32 +221,55 @@ mongoose.connection.once("open", function(err){
 		
 		var username = req.body.username;
 	
-	Db.findOne({username: username}, function(err, snippet){
+		Db.findOne({username: username}, function(err, snippet){
 	
-		if(err || !snippet){
-			console.log(err);
-			return;
+			if(err || !snippet){
+				console.log(err);
+				return;
+			}
+		
+			res.json(snippet.fullNews);
+		});
+	
+	});
+
+	app.post("/disconnected", function(req, res){
+		
+		var username = req.body.username;
+		
+		array.splice(array.indexOf(username),1);
+		
+	});
+
+	app.post("/daily", function(req, res){
+		
+		var schedule = req.body.schedule;
+		var username = req.body.username;
+		var scheduleIndex = scheduleObj.key1.indexOf(username);
+		
+		if(scheduleIndex==-1){
+			scheduleObj.key1.push(username);
+			scheduleObj.key2.push(schedule);
+		}
+		else{
+			scheduleObj.key2[scheduleIndex]=schedule;
 		}
 		
-		res.json(snippet.fullNews);
-	});
-	
-});
-
-	app.get("/daily", function(req, res){
 		number ++;
 		var job = new CronJob({
 		cronTime: '00 00 10 * * 1-5',
 		//cronTime: '* * * * *',
 		onTick: function() {
-		if(number>1){
+		while(number>1){
 			number--;
 			job.stop();
 		}
+		
 		console.log("time");
 		number--;
 		job.stop();
-		res.send("a");
+		res.json(scheduleObj);
+		
 		},
 		start: false,
 		timeZone: 'America/New_York'
@@ -269,7 +291,7 @@ mongoose.connection.once("open", function(err){
 				console.log(err);
 				return;
 			}
-			//error is here
+			
 			var arr = snippet.likes;
 			var index = arr.indexOf(disliked);
 			
